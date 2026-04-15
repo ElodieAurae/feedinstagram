@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon bilan mensuel Instagram</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap');
+:root{--bg:#FDFCFA;--bg2:#F4EFE8;--navy:#1B2E3C;--navy2:#2C4A5E;--gold:#C49A3C;--terra:#8F3F27;--text:#1B2E3C;--text2:#5A6E78;--text3:#8B9EA8;--border:#C8D5DB;--green:#4E7A72}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:32px 24px;max-width:680px;margin:0 auto}
+h1{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--navy);margin-bottom:6px}
+.subtitle{font-size:13px;color:var(--text3);margin-bottom:32px}
+.card{background:white;border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--navy);margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg{display:flex;flex-direction:column;gap:6px}
+.fl{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
+.fi{padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--navy);background:var(--bg);outline:none;transition:border-color .15s;width:100%}
+.fi:focus{border-color:var(--navy2);background:white}
+.month-select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--navy);background:var(--bg);outline:none;cursor:pointer}
+.btn{width:100%;background:var(--navy);color:white;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s;margin-top:8px}
+.btn:hover{background:var(--navy2)}
+.result{display:none;background:white;border:1px solid var(--border);border-radius:14px;padding:28px;margin-top:20px}
+.result.show{display:block}
+.result-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.result-month{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--navy)}
+.score-badge{background:var(--navy);color:white;border-radius:20px;padding:4px 14px;font-size:12px;font-weight:500}
+.bilan-text{font-size:14px;color:var(--text);line-height:1.7;white-space:pre-wrap}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.stat-box{background:var(--bg2);border-radius:10px;padding:12px;text-align:center}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:var(--navy)}
+.stat-label{font-size:10px;color:var(--text3);margin-top:2px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.loading{text-align:center;padding:32px;color:var(--text3);font-size:13px}
+.spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.conseil-box{background:linear-gradient(135deg,#eef3f7,#f4efe8);border-radius:10px;padding:16px;margin-top:16px;border-left:3px solid var(--gold)}
+.conseil-title{font-size:11px;font-weight:500;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.conseil-text{font-size:13px;color:var(--navy);line-height:1.6}
+.history-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:8px 16px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--text2);transition:all .15s;margin-top:12px}
+.history-btn:hover{border-color:var(--navy2);color:var(--navy)}
+.history{display:none;margin-top:16px}
+.history.show{display:block}
+.hist-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2)}
+.hist-item:last-child{border-bottom:none}
+.hist-month{font-weight:500;color:var(--navy)}
+.hist-score{background:var(--bg2);border-radius:10px;padding:2px 10px;font-size:11px}
+</style>
+</head>
+<body>
+
+<h1>Mon bilan mensuel</h1>
+<p class="subtitle">Entrez vos chiffres du mois — l'IA analyse votre engagement et vous donne un conseil personnalisé.</p>
+
+<div class="card">
+  <div class="card-title">Quel mois analysez-vous ?</div>
+  <select class="month-select" id="monthSelect">
+    <option value="janvier 2026">Janvier 2026</option>
+    <option value="février 2026">Février 2026</option>
+    <option value="mars 2026">Mars 2026</option>
+    <option value="avril 2026" selected>Avril 2026</option>
+    <option value="mai 2026">Mai 2026</option>
+    <option value="juin 2026">Juin 2026</option>
+    <option value="juillet 2026">Juillet 2026</option>
+    <option value="août 2026">Août 2026</option>
+    <option value="septembre 2026">Septembre 2026</option>
+    <option value="octobre 2026">Octobre 2026</option>
+    <option value="novembre 2026">Novembre 2026</option>
+    <option value="décembre 2026">Décembre 2026</option>
+  </select>
+</div>
+
+<div class="card">
+  <div class="card-title">Vos interactions ce mois</div>
+  <div class="form-grid">
+    <div class="fg"><label class="fl">Commentaires laissés</label><input class="fi" type="number" id="commentaires" placeholder="0" min="0"></div>
+    <div class="fg"><label class="fl">Likes donnés</label><input class="fi" type="number" id="likes" placeholder="0" min="0"></div>
+    <div class="fg"><label class="fl">Nouveaux abonnements</label><input class="fi" type="number" id="abonnements" placeholder="0" min="0"></div>
+    <div class="fg"><label class="fl">DM envoyés</label><input class="fi" type="number" id="dms" placeholder="0" min="0"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">Vos publications ce mois</div>
+  <div class="form-grid">
+    <div class="fg"><label class="fl">Posts publiés</label><input class="fi" type="number" id="posts" placeholder="0" min="0"></div>
+    <div class="fg"><label class="fl">Réels publiés</label><input class="fi" type="number" id="reels" placeholder="0" min="0"></div>
+    <div class="fg"><label class="fl">Nouveaux abonnés reçus</label><input class="fi" type="number" id="newFollowers" placeholder="0" min="0"></div>
+    <div class="fg"><label class="fl">Demandes reçues (DM entrants)</label><input class="fi" type="number" id="dmRecu" placeholder="0" min="0"></div>
+  </div>
+</div>
+
+<button class="btn" onclick="analyser()">Analyser mon mois →</button>
+
+<div class="result" id="result">
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    Analyse en cours...
+  </div>
+  <div id="resultContent" style="display:none">
+    <div class="result-header">
+      <div class="result-month" id="resultMonth"></div>
+      <div class="score-badge" id="scoreBadge"></div>
+    </div>
+    <div class="stats-row" id="statsRow"></div>
+    <div class="bilan-text" id="bilanText"></div>
+    <div class="conseil-box">
+      <div class="conseil-title">Conseil pour le mois prochain</div>
+      <div class="conseil-text" id="conseilText"></div>
+    </div>
+    <button class="history-btn" onclick="toggleHistory()">Voir l'historique des mois précédents</button>
+    <div class="history" id="history"></div>
+  </div>
+</div>
+
+<script>
+let history = JSON.parse(localStorage.getItem('aurae_bilan_history') || '[]');
+
+function calcScore(c,l,a,d){return c*4+l*2+a*1+d*6}
+
+async function analyser(){
+  const mois = document.getElementById('monthSelect').value;
+  const c = parseInt(document.getElementById('commentaires').value)||0;
+  const l = parseInt(document.getElementById('likes').value)||0;
+  const a = parseInt(document.getElementById('abonnements').value)||0;
+  const d = parseInt(document.getElementById('dms').value)||0;
+  const posts = parseInt(document.getElementById('posts').value)||0;
+  const reels = parseInt(document.getElementById('reels').value)||0;
+  const newF = parseInt(document.getElementById('newFollowers').value)||0;
+  const dmR = parseInt(document.getElementById('dmRecu').value)||0;
+
+  const score = calcScore(c,l,a,d);
+  const result = document.getElementById('result');
+  const loading = document.getElementById('loading');
+  const resultContent = document.getElementById('resultContent');
+
+  result.classList.add('show');
+  loading.style.display='block';
+  resultContent.style.display='none';
+
+  const prompt = `Tu es un coach Instagram spécialisé en menuiserie extérieure aluminium. Analyse les chiffres d'engagement de ce compte professionnel pour ${mois} et rédige un bilan personnalisé.
+
+Chiffres du mois :
+- Commentaires laissés sur d'autres comptes : ${c}
+- Likes donnés : ${l}
+- Nouveaux abonnements initiés : ${a}
+- DM envoyés en prospection : ${d}
+- Posts publiés : ${posts}
+- Réels publiés : ${reels}
+- Nouveaux abonnés reçus : ${newF}
+- DM entrants reçus : ${dmR}
+- Score d'engagement total : ${score} points (formule : commentaires×4 + likes×2 + abonnements×1 + DM×6)
+
+Règles de scoring :
+- Score > 100 : excellent mois
+- Score 60-100 : bon mois
+- Score 30-60 : mois moyen, des efforts à faire
+- Score < 30 : mois faible, action urgente nécessaire
+
+Rédige un bilan de 4 à 6 phrases en français, naturel et direct, comme si tu parlais à un professionnel de la menuiserie aluminium. Pas de bullet points. Pas d'émojis. Pas de formules corporate. Sois honnête sur les points faibles. Commence par une phrase qui caractérise ce mois en une idée forte.
+
+Ensuite, sur une nouvelle ligne commençant par "CONSEIL:", donne UN seul conseil concret et actionnable pour le mois prochain, en 2 phrases maximum. Ce conseil doit être spécifique au profil menuiserie aluminium (architectes, particuliers CSP+, BTP local).`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{role: "user", content: prompt}]
+      })
+    });
+
+    const data = await response.json();
+    const fullText = data.content[0].text;
+    const parts = fullText.split('CONSEIL:');
+    const bilan = parts[0].trim();
+    const conseil = parts[1] ? parts[1].trim() : "Concentrez-vous sur les commentaires — c'est l'interaction qui crée le plus de visibilité.";
+
+    document.getElementById('resultMonth').textContent = mois.charAt(0).toUpperCase() + mois.slice(1);
+    document.getElementById('scoreBadge').textContent = `Score : ${score} pts`;
+
+    document.getElementById('statsRow').innerHTML = `
+      <div class="stat-box"><div class="stat-num">${c}</div><div class="stat-label">Commentaires</div></div>
+      <div class="stat-box"><div class="stat-num">${posts+reels}</div><div class="stat-label">Publications</div></div>
+      <div class="stat-box"><div class="stat-num">${newF}</div><div class="stat-label">Nouveaux abonnés</div></div>
+      <div class="stat-box"><div class="stat-num">${dmR}</div><div class="stat-label">DM reçus</div></div>`;
+
+    document.getElementById('bilanText').textContent = bilan;
+    document.getElementById('conseilText').textContent = conseil;
+
+    // Sauvegarder dans l'historique
+    const entry = {mois, score, c, l, a, d, posts, reels, newF, dmR, bilan, conseil};
+    history = history.filter(h => h.mois !== mois);
+    history.unshift(entry);
+    if(history.length > 12) history = history.slice(0,12);
+    localStorage.setItem('aurae_bilan_history', JSON.stringify(history));
+
+    renderHistory();
+    loading.style.display='none';
+    resultContent.style.display='block';
+
+  } catch(e) {
+    loading.innerHTML = '<p style="color:var(--terra)">Une erreur est survenue. Vérifiez votre connexion et réessayez.</p>';
+  }
+}
+
+function renderHistory(){
+  const h = document.getElementById('history');
+  if(history.length <= 1){h.innerHTML='<p style="font-size:12px;color:var(--text3);padding:10px 0">Aucun historique pour l\'instant.</p>';return}
+  h.innerHTML = history.slice(1).map(e=>`
+    <div class="hist-item">
+      <span class="hist-month">${e.mois}</span>
+      <span>${e.c} commentaires · ${e.posts+e.reels} publications</span>
+      <span class="hist-score">${e.score} pts</span>
+    </div>`).join('');
+}
+
+function toggleHistory(){
+  const h = document.getElementById('history');
+  h.classList.toggle('show');
+  renderHistory();
+}
+</script>
+</body>
+</html>
