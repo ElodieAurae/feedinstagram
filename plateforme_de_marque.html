@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ma plateforme de marque — Auraé</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Montserrat:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap');
+
+:root{
+  --navy:#1B2E3C;--navy2:#2C4A5E;--gold:#C49A3C;
+  --rose:#A4514C;--sand:#F4EFE8;--sand2:#EDE7DE;
+  --green:#4E7A72;--text:#1B2E3C;--text2:#5A6E78;--text3:#8B9EA8;
+  --border:#C8D5DB;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Montserrat',sans-serif;background:var(--sand);color:var(--text);min-height:100vh}
+
+/* HEADER */
+.header{background:var(--navy);padding:32px 40px 28px}
+.brand{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.brand-dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.brand-label{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:500;color:var(--gold);letter-spacing:.2em;text-transform:uppercase}
+.header-title{font-family:'Abril Fatface',cursive;font-size:32px;color:white;line-height:1.1;margin-bottom:6px}
+.header-title em{color:var(--rose);font-style:italic}
+.header-sub{font-family:'Lora',serif;font-size:13px;color:var(--text3);font-style:italic}
+
+/* PROGRESS */
+.progress-wrap{background:rgba(255,255,255,0.06);border-radius:8px;padding:14px 20px;margin-top:20px;display:flex;align-items:center;gap:16px}
+.progress-bar{flex:1;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--rose);border-radius:2px;transition:width .4s ease}
+.progress-text{font-family:'Montserrat',sans-serif;font-size:11px;color:var(--text3);white-space:nowrap}
+
+/* MAIN */
+.main{max-width:720px;margin:0 auto;padding:32px 24px}
+
+/* SECTION */
+.section{background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:20px;overflow:hidden}
+.section-head{padding:18px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.section-num{font-family:'Abril Fatface',cursive;font-size:22px;color:var(--rose);line-height:1;flex-shrink:0}
+.section-info{}
+.section-title{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:var(--navy);text-transform:uppercase;letter-spacing:.06em}
+.section-desc{font-family:'Lora',serif;font-size:12px;font-style:italic;color:var(--text3);margin-top:2px}
+.section-body{padding:20px 24px}
+
+/* QUESTION */
+.question{margin-bottom:20px}
+.question:last-child{margin-bottom:0}
+.q-label{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;display:flex;align-items:flex-start;gap:6px}
+.q-tip{font-family:'Lora',serif;font-size:11px;font-style:italic;color:var(--text3);margin-bottom:8px;line-height:1.5}
+.q-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:'Montserrat',sans-serif;color:var(--navy);background:var(--sand);outline:none;transition:border-color .15s;resize:vertical;line-height:1.6}
+.q-input:focus{border-color:var(--rose);background:white}
+.q-input.short{min-height:44px;resize:none}
+.q-input.medium{min-height:80px}
+.q-input.tall{min-height:120px}
+
+/* EXEMPLE */
+.exemple{background:var(--sand2);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:10px;font-family:'Lora',serif;font-size:11px;font-style:italic;color:var(--text2);line-height:1.6}
+.exemple strong{font-style:normal;font-size:10px;font-family:'Montserrat',sans-serif;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px}
+
+/* GENERATE BTN */
+.generate-section{background:white;border-radius:14px;border:1px solid var(--border);padding:28px 24px;text-align:center;margin-bottom:20px}
+.generate-title{font-family:'Abril Fatface',cursive;font-size:22px;color:var(--navy);margin-bottom:8px}
+.generate-sub{font-family:'Lora',serif;font-size:13px;font-style:italic;color:var(--text3);margin-bottom:20px}
+.generate-btn{background:var(--navy);color:white;border:none;border-radius:10px;padding:14px 32px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;letter-spacing:.05em;transition:background .15s;width:100%}
+.generate-btn:hover{background:var(--navy2)}
+.generate-btn:disabled{background:var(--text3);cursor:not-allowed}
+
+/* RESULT */
+.result{background:white;border-radius:14px;border:1px solid var(--border);padding:28px 24px;display:none}
+.result.show{display:block}
+.result-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.result-title{font-family:'Abril Fatface',cursive;font-size:20px;color:var(--navy)}
+.copy-btn{background:var(--rose);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;letter-spacing:.04em;transition:background .15s}
+.copy-btn:hover{background:#8F3F3A}
+.result-body{font-family:'Lora',serif;font-size:13px;color:var(--text);line-height:1.8;white-space:pre-wrap}
+
+/* LOADING */
+.loading{text-align:center;padding:32px}
+.spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--rose);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-family:'Lora',serif;font-size:13px;font-style:italic;color:var(--text3)}
+
+/* FOOTER */
+.footer{text-align:center;padding:16px;font-family:'Lora',serif;font-size:11px;font-style:italic;color:var(--text3)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand"><div class="brand-dot"></div><div class="brand-label">Auraé — L'Ancrage</div></div>
+  <div class="header-title">Ma plateforme de <em>marque</em></div>
+  <div class="header-sub">Répondez à chaque question avec sincérité. Plus vous allez loin, plus le résultat sera fort.</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+    <button onclick="exportPDF()" style="background:var(--rose);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;letter-spacing:.04em">📄 Exporter ma plateforme</button>
+    <button onclick="saveData()" style="background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:8px 16px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif">💾 Sauvegarder</button>
+    <button onclick="document.getElementById('restoreFile').click()" style="background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:8px 16px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif">📂 Restaurer</button>
+    <input type="file" id="restoreFile" accept=".json" style="display:none" onchange="restoreData(event)">
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-text" id="progressText">0 / 9 sections</div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- SECTION 1 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">01</div>
+    <div class="section-info">
+      <div class="section-title">L'entreprise en quelques mots</div>
+      <div class="section-desc">Les faits de base, avant d'aller plus loin</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Nom de l'entreprise</div>
+      <textarea class="q-input short" id="q_nom" placeholder="ex : Menuiserie Dupont" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Zone géographique principale</div>
+      <textarea class="q-input short" id="q_zone" placeholder="ex : Bouches-du-Rhône, région PACA" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Produits et services principaux</div>
+      <div class="q-tip">Soyez précis — pas "menuiserie aluminium" mais quoi exactement, dans quel contexte</div>
+      <textarea class="q-input medium" id="q_produits" placeholder="ex : Pose de fenêtres, baies vitrantes, pergolas bioclimatiques, garde-corps aluminium — essentiellement pour des particuliers en rénovation haut de gamme" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Taille de l'entreprise et organisation</div>
+      <div class="q-tip">Nombre de personnes, équipe terrain, structure commerciale — pour contextualiser</div>
+      <textarea class="q-input medium" id="q_taille" placeholder="ex : 12 personnes dont 8 poseurs, 2 commerciaux, 1 assistante. Dirigeant très présent sur les chantiers." oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">02</div>
+    <div class="section-info">
+      <div class="section-title">L'histoire vraie</div>
+      <div class="section-desc">Ce qui vous a amené là où vous êtes — pas un CV, une vraie histoire</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Comment l'entreprise a-t-elle été créée ou reprise ? Par qui, dans quel contexte ?</div>
+      <div class="q-tip">Le moment de départ, la décision, le contexte personnel ou professionnel — soyez précis, pas générique</div>
+      <textarea class="q-input tall" id="q_histoire" placeholder="ex : Mon père a créé l'entreprise en 1987 comme artisan seul. J'ai repris en 2015 après 10 ans chez un grand groupe. J'ai voulu garder l'âme artisanale mais monter en gamme." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Quel a été le moment charnière — la décision, le chantier, le client qui a tout changé ?</div>
+      <div class="q-tip">Il y a souvent un moment précis. Retrouvez-le.</div>
+      <textarea class="q-input tall" id="q_tournant" placeholder="ex : En 2019, on a répondu à une consultation d'un architecte parisien sur une villa à Aix. On a été choisis. Ce chantier nous a montré qu'on était capables d'autre chose." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">De quoi êtes-vous le plus fier dans votre parcours jusqu'ici ?</div>
+      <textarea class="q-input medium" id="q_fierte" placeholder="ex : D'avoir formé 4 poseurs depuis zéro qui sont maintenant nos meilleurs éléments. Et d'avoir tenu nos délais sur 100% de nos chantiers en 2023." oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">03</div>
+    <div class="section-info">
+      <div class="section-title">Ce que vous défendez vraiment</div>
+      <div class="section-desc">Pas ce que vous vendez — ce en quoi vous croyez</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Qu'est-ce qui vous énerve dans votre secteur ? Ce que font les autres entreprises de menuiserie qui vous agace profondément ?</div>
+      <div class="q-tip">Soyez honnête. L'irritation révèle vos vraies valeurs mieux que n'importe quelle belle phrase.</div>
+      <div class="exemple"><strong>Exemple de réponse profonde</strong>"Ce qui m'énerve, c'est les entreprises qui proposent des prix bas et bâclent la pose. Le client ne voit pas les défauts tout de suite, et 3 ans après il pleure. On répare leurs erreurs depuis 10 ans."</div>
+      <textarea class="q-input tall" id="q_energie" placeholder="Qu'est-ce qui vous met hors de vous dans ce secteur ?" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Si votre entreprise disparaissait demain, qu'est-ce qui manquerait vraiment ? À vos clients, à votre équipe, à votre marché local ?</div>
+      <div class="q-tip">Pas ce que vous pensez qu'on attend de vous. Ce que vous savez pertinemment qu'on ne retrouverait pas facilement.</div>
+      <textarea class="q-input tall" id="q_disparition" placeholder="ex : On perdrait la seule entreprise de la région qui travaille vraiment avec les architectes sans leur faire sentir qu'ils sont une contrainte." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Quelle est la chose que vous refuseriez de faire même si elle vous rapportait plus d'argent ?</div>
+      <div class="q-tip">Cette question révèle vos valeurs réelles, pas celles que vous affichez.</div>
+      <textarea class="q-input medium" id="q_refus" placeholder="ex : Sous-traiter nos poses à des équipes qu'on ne connaît pas pour gagner en volume. On préfère refuser un chantier que de ne pas contrôler la qualité." oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">04</div>
+    <div class="section-info">
+      <div class="section-title">Ce qui vous différencie vraiment</div>
+      <div class="section-desc">Pas des banalités — des faits précis et vérifiables</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Pourquoi un client qui a comparé 3 devis vous a-t-il choisi ? Qu'est-ce qu'il vous a dit ?</div>
+      <div class="q-tip">Les vraies raisons, pas ce que vous pensez. Si vous avez des verbatims clients, utilisez-les.</div>
+      <textarea class="q-input tall" id="q_choix" placeholder="ex : 'Vous étiez les seuls à nous avoir proposé de voir un chantier terminé avant de signer.' Ou : 'Votre commercial a pris le temps d'expliquer les différences de vitrage alors que les autres ont juste envoyé un PDF.'" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Qu'est-ce que vous faites systématiquement sur chaque chantier que d'autres bâclent ou oublient ?</div>
+      <div class="q-tip">Le détail opérationnel qui fait la différence — pas le discours, les actes.</div>
+      <textarea class="q-input medium" id="q_detail" placeholder="ex : On laisse le chantier propre. On prend des photos avant/pendant/après. On rappelle le client 3 semaines après la pose pour vérifier que tout va bien." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Listez 3 à 5 faits concrets et vérifiables qui montrent votre niveau d'exigence</div>
+      <div class="q-tip">Chiffres, certifications, durées, process, références — ce qui est mesurable et prouvable</div>
+      <textarea class="q-input medium" id="q_preuves" placeholder="ex : Poseurs salariés en interne depuis toujours. Garantie décennale sans franchise. Délais tenus sur 97% de nos chantiers depuis 2020. Seule entreprise certifiée Technal Premium dans notre département." oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">05</div>
+    <div class="section-info">
+      <div class="section-title">Vos clients et votre cible</div>
+      <div class="section-desc">Qui vous suit, qui vous voulez attirer, et ce qu'ils disent vraiment</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Décrivez votre meilleur client — celui avec qui tout se passe bien, qui vous recommande, qui revient</div>
+      <div class="q-tip">Pas un profil sociologique. Une vraie personne ou un vrai profil d'entreprise que vous avez en tête.</div>
+      <textarea class="q-input tall" id="q_client_ideal" placeholder="ex : Un propriétaire de maison des années 80 qui veut la transformer. Il est exigeant, il a un budget. Il a fait des recherches avant d'appeler. Il ne veut pas le moins cher, il veut ne pas avoir de problème." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Quel type de client voulez-vous attirer davantage, et pourquoi n'en avez-vous pas encore assez ?</div>
+      <textarea class="q-input medium" id="q_cible_visee" placeholder="ex : Les architectes. On sait qu'on peut travailler sur leurs projets mais on n'est pas encore dans leur réseau. On n'a pas la visibilité." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Quels mots vos clients utilisent-ils pour vous décrire à leurs proches ? (avis Google, ce qu'ils vous disent en face)</div>
+      <div class="q-tip">Les mots exacts, pas vos mots. Ce que vous entendez ou lisez spontanément.</div>
+      <textarea class="q-input medium" id="q_mots_clients" placeholder="ex : 'Sérieux', 'pas de mauvaise surprise', 'ils font ce qu'ils disent', 'l'équipe est propre et respectueuse', 'on recommandera sans hésiter'" oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">06</div>
+    <div class="section-info">
+      <div class="section-title">Vos ambitions</div>
+      <div class="section-desc">Où vous voulez aller — sans fausse modestie</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Dans 5 ans, si tout se passe comme vous le voulez, comment décrieriez-vous votre entreprise ?</div>
+      <div class="q-tip">Type de clients, réputation, taille, positionnement prix — soyez précis, pas vague</div>
+      <textarea class="q-input tall" id="q_vision" placeholder="ex : La référence menuiserie haut de gamme sur notre département. Ceux que les architectes recommandent. 20% du chiffre avec des prescripteurs. Une équipe de 18 personnes, toujours en interne." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Quelle est la réputation que vous voulez avoir dans 5 ans ? Ce qu'on dit de vous quand vous n'êtes pas là ?</div>
+      <textarea class="q-input medium" id="q_reputation" placeholder="ex : 'Si tu veux être tranquille, appelle Dupont. C'est cher mais tu n'auras jamais de problème et le résultat est impeccable.'" oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">07</div>
+    <div class="section-info">
+      <div class="section-title">Vos valeurs réelles</div>
+      <div class="section-desc">Ce qui guide vos décisions, même quand c'est inconfortable</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Racontez une décision récente qui reflète ce en quoi vous croyez vraiment — même si elle vous a coûté quelque chose</div>
+      <div class="q-tip">Un chantier refusé, un client recadré, une pratique abandonnée — quelque chose de concret</div>
+      <div class="exemple"><strong>Exemple de réponse profonde</strong>"On a refusé un chantier de 40k€ parce que le client voulait qu'on utilise des matériaux qu'on ne recommandait pas. On aurait pu faire le travail et encaisser. On ne l'a pas fait."</div>
+      <textarea class="q-input tall" id="q_valeur_acte" placeholder="Quelle décision difficile avez-vous prise récemment qui vous ressemble ?" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Choisissez 3 à 5 valeurs qui guident vraiment votre entreprise — et pour chacune, donnez un exemple concret qui la prouve</div>
+      <div class="q-tip">Pas des valeurs affichées sur un mur. Des valeurs qui ont un coût parfois.</div>
+      <textarea class="q-input tall" id="q_valeurs" placeholder="ex : Fiabilité — on rappelle toujours dans les 24h, même pour dire qu'on n'a pas de réponse encore. Transparence — on dit quand on ne sait pas faire quelque chose. Exigence — on reprend une pose si le résultat ne nous satisfait pas, même si le client ne l'a pas vu." oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 8 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">08</div>
+    <div class="section-info">
+      <div class="section-title">Votre personnalité de marque</div>
+      <div class="section-desc">Comment vous parlez, ce que vous incarnez</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Si votre entreprise était une personne, comment la décririez-vous en 5 adjectifs ?</div>
+      <textarea class="q-input short" id="q_adjectifs" placeholder="ex : Direct, fiable, discret, exigeant, humain" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Quelles marques ou entreprises admiriez-vous pour leur façon de communiquer ? Pourquoi ?</div>
+      <div class="q-tip">Pas forcément dans votre secteur — ce qui compte c'est pourquoi ça vous touche</div>
+      <textarea class="q-input medium" id="q_inspiration" placeholder="ex : Maison&Objet pour le côté artisanal premium assumé. Apple pour la simplicité et l'absence de jargon. Ils ne sur-expliquent jamais." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Quel ton ne sera jamais le vôtre ? Ce que vous refusez absolument dans une communication ?</div>
+      <textarea class="q-input medium" id="q_ton_refuse" placeholder="ex : Le ton bonhomme, décontracté à l'excès. Les emojis dans les devis. Les superlatifs vides — 'incroyable', 'exceptionnel'. Le manque de sobriété." oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 9 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">09</div>
+    <div class="section-info">
+      <div class="section-title">Votre promesse et votre positionnement</div>
+      <div class="section-desc">Ce que vous garantissez — une seule phrase, sans échappatoire</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Si vous deviez écrire une garantie sur votre devis — une chose que vous ne raterez jamais — ce serait quoi ?</div>
+      <div class="q-tip">Pas une promesse marketing. Une vraie garantie que vous assumeriez devant un tribunal.</div>
+      <textarea class="q-input medium" id="q_promesse" placeholder="ex : Livraison dans le délai annoncé ou on revient sans surcoût jusqu'à ce que ce soit parfait." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">En une phrase, comment vous positionnez-vous par rapport à vos concurrents directs ? Ce que vous êtes qu'ils ne sont pas.</div>
+      <div class="q-tip">Soyez tranchant. Une vraie prise de position, pas une formule creuse.</div>
+      <textarea class="q-input medium" id="q_positionnement" placeholder="ex : On est la seule entreprise de la région qui travaille uniquement avec ses propres poseurs — jamais de sous-traitance, jamais de surprise." oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- GENERATE -->
+<div class="generate-section">
+  <div class="generate-title">Copier mes réponses</div>
+  <div class="generate-sub">L'IA va analyser toutes vos réponses et rédiger votre plateforme de marque complète. Comptez 30 à 60 secondes.</div>
+  <button class="generate-btn" id="generateBtn" onclick="copyAnswers()">Copier mes réponses →</button>
+</div>
+
+<!-- RESULT -->
+<div class="result" id="result" style="display:none">
+  <div class="result-head">
+    <div class="result-title">Votre plateforme de marque</div>
+    <button class="copy-btn" onclick="copyResult()">Copier tout</button>
+  </div>
+  <div id="loadingDiv" style="display:none" class="loading">
+    <div class="spinner"></div>
+    <div class="loading-text">L'IA analyse vos réponses et rédige votre plateforme...</div>
+  </div>
+  <div class="result-body" id="resultBody" style="display:none" style="display:none"></div>
+</div>
+
+<div class="footer">Auraé — L'Ancrage · Ce document est confidentiel</div>
+
+</div>
+
+<script>
+const FIELDS = ['q_nom','q_zone','q_produits','q_taille','q_histoire','q_tournant','q_fierte',
+  'q_energie','q_disparition','q_refus','q_choix','q_detail','q_preuves',
+  'q_client_ideal','q_cible_visee','q_mots_clients','q_vision','q_reputation',
+  'q_valeur_acte','q_valeurs','q_adjectifs','q_inspiration','q_ton_refuse',
+  'q_promesse','q_positionnement'];
+
+const SECTIONS = 9;
+
+function updateProgress(){
+  const filled = FIELDS.filter(id => document.getElementById(id)?.value?.trim().length > 10).length;
+  const pct = Math.round((filled / FIELDS.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  const sectionsApprox = Math.round((filled / FIELDS.length) * SECTIONS);
+  document.getElementById('progressText').textContent = `${sectionsApprox} / ${SECTIONS} sections`;
+}
+
+function getAnswers(){
+  return {
+    nom: v('q_nom'), zone: v('q_zone'), produits: v('q_produits'), taille: v('q_taille'),
+    histoire: v('q_histoire'), tournant: v('q_tournant'), fierte: v('q_fierte'),
+    energie: v('q_energie'), disparition: v('q_disparition'), refus: v('q_refus'),
+    choix: v('q_choix'), detail: v('q_detail'), preuves: v('q_preuves'),
+    client_ideal: v('q_client_ideal'), cible_visee: v('q_cible_visee'), mots_clients: v('q_mots_clients'),
+    vision: v('q_vision'), reputation: v('q_reputation'),
+    valeur_acte: v('q_valeur_acte'), valeurs: v('q_valeurs'),
+    adjectifs: v('q_adjectifs'), inspiration: v('q_inspiration'), ton_refuse: v('q_ton_refuse'),
+    promesse: v('q_promesse'), positionnement: v('q_positionnement')
+  };
+}
+
+function v(id){ return document.getElementById(id)?.value?.trim() || '(non renseigné)'; }
+
+function copyAnswers(){
+  var sections = document.querySelectorAll('.section-block, .q-block, .section');
+  var txt = 'MES REPONSES - PLATEFORME DE MARQUE\n';
+  txt += '=====================================\n\n';
+  
+  // Collecter toutes les questions et réponses
+  document.querySelectorAll('textarea, input[type=text]').forEach(function(el){
+    var label = '';
+    var parent = el.closest('.q-wrap, .q-block, div');
+    if(parent){
+      var lbl = parent.querySelector('label, .q-label, .label');
+      if(lbl) label = lbl.textContent.trim();
+    }
+    if(!label){
+      var prev = el.previousElementSibling;
+      if(prev) label = prev.textContent.trim();
+    }
+    if(el.value.trim()){
+      txt += (label ? label + '\n' : '') + el.value.trim() + '\n\n';
+    }
+  });
+  
+  // Options sélectionnées
+  document.querySelectorAll('.opt.sel, .option.selected, [data-selected=true]').forEach(function(el){
+    txt += 'Choix : ' + el.textContent.trim() + '\n\n';
+  });
+  
+  navigator.clipboard.writeText(txt).then(function(){
+    var btn = document.querySelector('[onclick="copyAnswers()"]');
+    if(btn){ btn.textContent = 'Copie réussie'; setTimeout(function(){ btn.textContent = 'Copier mes réponses'; }, 2000); }
+  }).catch(function(){
+    // Fallback
+    var ta = document.createElement('textarea');
+    ta.value = txt; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    var btn = document.querySelector('[onclick="copyAnswers()"]');
+    if(btn){ btn.textContent = 'Copie réussie'; setTimeout(function(){ btn.textContent = 'Copier mes réponses'; }, 2000); }
+  });
+}
+
+function copyResult(){
+  const text = document.getElementById('resultBody').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✓ Copié';
+    setTimeout(()=>btn.textContent='Copier tout', 2000);
+  });
+}
+
+// SAUVEGARDE / RESTAURATION / EXPORT
+function saveData(){
+  var resultText = document.getElementById('resultBody') ? document.getElementById('resultBody').textContent : '';
+  var data = {result: resultText, savedAt: new Date().toISOString()};
+  var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'plateforme_de_marque_aurae.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function restoreData(e){
+  var file = e.target.files[0];
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev){
+    try{
+      var d = JSON.parse(ev.target.result);
+      if(d.result){
+        var result = document.getElementById('result');
+        var body = document.getElementById('resultBody');
+        var loading = document.getElementById('loadingDiv');
+        if(result && body){
+          result.classList.add('show');
+          if(loading) loading.style.display = 'none';
+          body.style.display = 'block';
+          body.textContent = d.result;
+        }
+      }
+      alert('Plateforme restaurée.');
+    }catch(err){alert('Fichier invalide.');}
+  };
+  reader.readAsText(file);
+}
+
+function exportPDF(){
+  var body = document.getElementById('resultBody');
+  if(!body || !body.textContent.trim()){
+    alert('Générez d\'abord votre plateforme de marque avant de l\'exporter.');
+    return;
+  }
+  var w = window.open('', '_blank');
+  if(!w) return;
+  var date = new Date().toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'});
+  var text = body.textContent.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8">'
+    + '<style>body{font-family:sans-serif;max-width:700px;margin:40px auto;padding:0 24px;color:#1B2E3C}'
+    + 'h1{font-size:28px;margin-bottom:4px}'
+    + 'pre{white-space:pre-wrap;font-family:sans-serif;font-size:13px;line-height:1.8;color:#1B2E3C}'
+    + '.footer{margin-top:40px;padding-top:16px;border-top:1px solid #C8D5DB;font-size:11px;color:#8B9EA8;display:flex;justify-content:space-between}'
+    + '</style><title>Plateforme de marque</title></head><body>'
+    + '<h1>Plateforme de marque</h1>'
+    + '<p style="font-size:12px;color:#8B9EA8;margin-bottom:32px">Document généré depuis L\'Ancrage — Auraé</p>'
+    + '<pre>' + text + '</pre>'
+    + '<div class="footer"><span>Plateforme de marque — confidentiel</span><span>' + date + '</span></div>'
+    + '</body></html>';
+  w.document.write(html);
+  w.document.close();
+  setTimeout(function(){w.print();}, 500);
+}
+</script>
+</body>
+</html>
