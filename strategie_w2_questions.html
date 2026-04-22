@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questions de fond — Auraé</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Montserrat:wght@300;400;500;600&family=Lora:ital,wght@0,400;1,400&display=swap');
+:root{--navy:#1B2E3C;--gold:#C49A3C;--rose:#A4514C;--sand:#F4EFE8;--sand2:#EDE7DE;--text:#1B2E3C;--text2:#5A6E78;--text3:#8B9EA8;--border:#C8D5DB;--green:#4E7A72;--sky:#5E8BA0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Montserrat',sans-serif;background:var(--sand);color:var(--text);min-height:100vh}
+.header{background:var(--navy);padding:28px 36px 24px}
+.brand{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.brand-dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.brand-label{font-size:10px;font-weight:500;color:var(--gold);letter-spacing:.2em;text-transform:uppercase}
+.header-title{font-family:'Abril Fatface',cursive;font-size:26px;color:white;margin-bottom:4px}
+.header-title em{color:var(--rose);font-style:italic}
+.header-sub{font-family:'Lora',serif;font-size:12px;color:var(--text3);font-style:italic;margin-bottom:14px}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn-h{border:none;border-radius:8px;padding:8px 16px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s}
+.btn-h.rose{background:var(--rose);color:white}
+.btn-h.sec{background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2)}
+.btn-h:hover{opacity:.85}
+.main{max-width:760px;margin:0 auto;padding:24px 20px}
+.section{background:white;border-radius:12px;border:1px solid var(--border);margin-bottom:14px;overflow:hidden}
+.section-head{padding:14px 20px;background:var(--navy);display:flex;align-items:center;gap:10px}
+.section-num{font-family:'Abril Fatface',cursive;font-size:18px;color:var(--rose);flex-shrink:0}
+.section-title{font-size:12px;font-weight:600;color:white;text-transform:uppercase;letter-spacing:.06em}
+.section-body{padding:16px 20px;display:flex;flex-direction:column;gap:14px}
+.qblock{}
+.qlabel{font-size:11px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.qtip{font-family:'Lora',serif;font-size:10px;font-style:italic;color:var(--text3);margin-bottom:6px;line-height:1.4}
+.fi{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:'Montserrat',sans-serif;color:var(--navy);background:var(--sand);outline:none;resize:vertical;line-height:1.5;transition:border-color .15s}
+.fi:focus{border-color:var(--rose);background:white}
+.opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.opt{border:1.5px solid var(--border);border-radius:7px;padding:5px 11px;cursor:pointer;font-size:10px;font-weight:600;color:var(--text2);transition:all .15s;user-select:none}
+.opt:hover{border-color:var(--rose);color:var(--rose)}
+.opt.on{border-color:var(--sky);background:rgba(94,139,160,0.08);color:var(--sky)}
+.gen-btn{width:100%;background:var(--navy);color:white;border:none;border-radius:10px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;margin-top:4px;transition:background .15s}
+.gen-btn:hover{background:#2C4A5E}
+.sy-wrap{background:white;border-radius:12px;border:1px solid var(--border);padding:22px;margin-top:16px;display:none}
+.sy-wrap.show{display:block}
+.sy-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.sy-title{font-family:'Abril Fatface',cursive;font-size:18px;color:var(--navy)}
+.copy-btn{background:var(--rose);color:white;border:none;border-radius:7px;padding:7px 14px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif}
+.sy-body{font-family:'Lora',serif;font-size:12px;color:var(--text);line-height:1.8;white-space:pre-wrap}
+.footer{text-align:center;padding:12px;font-family:'Lora',serif;font-size:10px;font-style:italic;color:var(--text3)}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="brand"><div class="brand-dot"></div><div class="brand-label">Auraé — Stratégie</div></div>
+  <div class="header-title">Exercice 2 — Questions de <em>fond</em></div>
+  <div class="header-sub">Répondez honnêtement. Ces questions permettront à Auraé de challenger vos décisions avec des éléments concrets.</div>
+  <div class="header-actions">
+    <button class="btn-h rose" onclick="genSy()">Générer ma synthèse</button>
+    <button class="btn-h sec" onclick="saveData()">💾 Sauvegarder</button>
+    <button class="btn-h sec" onclick="document.getElementById('rf').click()">📂 Restaurer</button>
+    <input type="file" id="rf" accept=".json" style="display:none" onchange="restoreData(event)">
+  </div>
+</div>
+<div class="main">
+
+<div class="section">
+  <div class="section-head"><div class="section-num">01</div><div class="section-title">Vos ressources humaines</div></div>
+  <div class="section-body">
+    <div class="qblock">
+      <div class="qlabel">Combien d'heures par semaine pouvez-vous consacrer à la communication ?</div>
+      <div class="qtip">Pas ce que vous aimeriez — ce que vous pouvez vraiment faire.</div>
+      <div class="opts" id="q_heures">
+        <div class="opt" onclick="selOpt('q_heures','Moins de 2h',this)">Moins de 2h</div>
+        <div class="opt" onclick="selOpt('q_heures','2 à 4h',this)">2 à 4h</div>
+        <div class="opt" onclick="selOpt('q_heures','4 à 8h',this)">4 à 8h</div>
+        <div class="opt" onclick="selOpt('q_heures','Plus de 8h',this)">Plus de 8h</div>
+      </div>
+    </div>
+    <div class="qblock">
+      <div class="qlabel">Qui s'occupe de la communication au quotidien ?</div>
+      <div class="qtip">Indiquez la fonction et si c'est dédié ou en plus du reste.</div>
+      <textarea class="fi" id="q_qui" rows="2" placeholder="ex : Assistante administrative, 30% de son temps. Ou : Le dirigeant, en plus de tout le reste." oninput="save()"></textarea>
+    </div>
+    <div class="qblock">
+      <div class="qlabel">Cette personne a-t-elle du temps officiellement alloué à la communication ?</div>
+      <div class="opts" id="q_temps_alloue">
+        <div class="opt" onclick="selOpt('q_temps_alloue','Oui, temps dédié',this)">Oui, temps dédié</div>
+        <div class="opt" onclick="selOpt('q_temps_alloue','Non, en plus du reste',this)">Non, en plus du reste</div>
+        <div class="opt" onclick="selOpt('q_temps_alloue','Partiellement',this)">Partiellement</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head"><div class="section-num">02</div><div class="section-title">Vos ressources visuelles</div></div>
+  <div class="section-body">
+    <div class="qblock">
+      <div class="qlabel">Avez-vous accès à des photos de qualité de vos chantiers ?</div>
+      <div class="opts" id="q_photos">
+        <div class="opt" onclick="selOpt('q_photos','Oui, beaucoup',this)">Oui, beaucoup</div>
+        <div class="opt" onclick="selOpt('q_photos','Quelques-unes',this)">Quelques-unes</div>
+        <div class="opt" onclick="selOpt('q_photos','Non, très peu',this)">Non, très peu</div>
+        <div class="opt" onclick="selOpt('q_photos','Non, aucune',this)">Non, aucune</div>
+      </div>
+    </div>
+    <div class="qblock">
+      <div class="qlabel">Si vous n'avez pas de photos, comment comptez-vous en produire ?</div>
+      <textarea class="fi" id="q_photos_plan" rows="2" placeholder="ex : Demander aux poseurs de photographier les chantiers. Faire appel à un photographe professionnel 2 fois par an." oninput="save()"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head"><div class="section-num">03</div><div class="section-title">Vos objectifs</div></div>
+  <div class="section-body">
+    <div class="qblock">
+      <div class="qlabel">Quel résultat concret attendez-vous dans 6 mois ?</div>
+      <div class="qtip">Pas "être plus visible" — quelque chose de précis et mesurable.</div>
+      <textarea class="fi" id="q_objectif" rows="2" placeholder="ex : Recevoir 3 demandes de devis par mois via les réseaux sociaux. Atteindre 500 abonnés Instagram qualifiés." oninput="save()"></textarea>
+    </div>
+    <div class="qblock">
+      <div class="qlabel">D'où viennent vos clients aujourd'hui ?</div>
+      <div class="opts" id="q_sources" style="flex-wrap:wrap">
+        <div class="opt" onclick="toggleMulti('q_sources','Bouche à oreille',this)">Bouche à oreille</div>
+        <div class="opt" onclick="toggleMulti('q_sources','Google',this)">Google</div>
+        <div class="opt" onclick="toggleMulti('q_sources','Réseaux sociaux',this)">Réseaux sociaux</div>
+        <div class="opt" onclick="toggleMulti('q_sources','Site internet',this)">Site internet</div>
+        <div class="opt" onclick="toggleMulti('q_sources','Prescripteurs',this)">Prescripteurs</div>
+        <div class="opt" onclick="toggleMulti('q_sources','Salons',this)">Salons</div>
+        <div class="opt" onclick="toggleMulti('q_sources','Showroom',this)">Showroom</div>
+        <div class="opt" onclick="toggleMulti('q_sources','Je ne sais pas',this)">Je ne sais pas</div>
+      </div>
+    </div>
+    <div class="qblock">
+      <div class="qlabel">Quel canal a déjà produit des résultats pour vous, même modestes ?</div>
+      <textarea class="fi" id="q_canal_resultat" rows="2" placeholder="ex : La fiche Google nous apporte quelques appels. Instagram nous a donné 2 contacts l'an dernier." oninput="save()"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head"><div class="section-num">04</div><div class="section-title">Votre budget</div></div>
+  <div class="section-body">
+    <div class="qblock">
+      <div class="qlabel">Avez-vous un budget communication défini ?</div>
+      <div class="opts" id="q_budget_defini">
+        <div class="opt" onclick="selOpt('q_budget_defini','Oui, défini',this)">Oui, défini</div>
+        <div class="opt" onclick="selOpt('q_budget_defini','Non, à définir',this)">Non, à définir</div>
+        <div class="opt" onclick="selOpt('q_budget_defini','Aucun budget',this)">Aucun budget</div>
+      </div>
+    </div>
+    <div class="qblock">
+      <div class="qlabel">Si oui, quel est votre budget mensuel approximatif ?</div>
+      <div class="opts" id="q_budget_montant">
+        <div class="opt" onclick="selOpt('q_budget_montant','Moins de 100 euros/mois',this)">Moins de 100 euros/mois</div>
+        <div class="opt" onclick="selOpt('q_budget_montant','100 à 300 euros/mois',this)">100 à 300 euros/mois</div>
+        <div class="opt" onclick="selOpt('q_budget_montant','300 à 800 euros/mois',this)">300 à 800 euros/mois</div>
+        <div class="opt" onclick="selOpt('q_budget_montant','Plus de 800 euros/mois',this)">Plus de 800 euros/mois</div>
+      </div>
+    </div>
+    <div class="qblock">
+      <div class="qlabel">Ce budget inclut-il du temps interne (salaires) ou uniquement les dépenses externes ?</div>
+      <div class="opts" id="q_budget_type">
+        <div class="opt" onclick="selOpt('q_budget_type','Uniquement dépenses externes',this)">Uniquement dépenses externes</div>
+        <div class="opt" onclick="selOpt('q_budget_type','Inclut le temps interne',this)">Inclut le temps interne</div>
+        <div class="opt" onclick="selOpt('q_budget_type','Je ne sais pas',this)">Je ne sais pas</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head"><div class="section-num">05</div><div class="section-title">Votre concurrence</div></div>
+  <div class="section-body">
+    <div class="qblock">
+      <div class="qlabel">Vos concurrents directs sont-ils présents sur les réseaux sociaux ?</div>
+      <div class="opts" id="q_concurrents">
+        <div class="opt" onclick="selOpt('q_concurrents','Oui, très actifs',this)">Oui, très actifs</div>
+        <div class="opt" onclick="selOpt('q_concurrents','Oui, mais peu actifs',this)">Oui, mais peu actifs</div>
+        <div class="opt" onclick="selOpt('q_concurrents','Non, peu présents',this)">Non, peu présents</div>
+        <div class="opt" onclick="selOpt('q_concurrents','Je ne sais pas',this)">Je ne sais pas</div>
+      </div>
+    </div>
+    <div class="qblock">
+      <div class="qlabel">Y a-t-il un canal que personne dans votre zone n'occupe sérieusement ?</div>
+      <textarea class="fi" id="q_opportunite" rows="2" placeholder="ex : Personne ne fait de LinkedIn sérieusement dans notre zone. Pinterest est inexploité." oninput="save()"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head"><div class="section-num">06</div><div class="section-title">Vos contraintes spécifiques</div></div>
+  <div class="section-body">
+    <div class="qblock">
+      <div class="qlabel">Y a-t-il des contraintes propres à votre entreprise qui impactent votre communication ?</div>
+      <div class="opts" id="q_contraintes">
+        <div class="opt" onclick="toggleMulti('q_contraintes','Plusieurs sites ou dépôts',this)">Plusieurs sites ou dépôts</div>
+        <div class="opt" onclick="toggleMulti('q_contraintes','Équipe terrain dispersée',this)">Équipe terrain dispersée</div>
+        <div class="opt" onclick="toggleMulti('q_contraintes','Dirigeant peu disponible',this)">Dirigeant peu disponible</div>
+        <div class="opt" onclick="toggleMulti('q_contraintes','Pas de bureau physique',this)">Pas de bureau physique</div>
+        <div class="opt" onclick="toggleMulti('q_contraintes','Forte saisonnalité',this)">Forte saisonnalité</div>
+        <div class="opt" onclick="toggleMulti('q_contraintes','Aucune contrainte particulière',this)">Aucune contrainte particulière</div>
+      </div>
+    </div>
+    <div class="qblock">
+      <div class="qlabel">Précisez si besoin</div>
+      <textarea class="fi" id="q_contraintes_detail" rows="2" placeholder="Détaillez vos contraintes spécifiques..." oninput="save()"></textarea>
+    </div>
+  </div>
+</div>
+
+<button class="gen-btn" onclick="genSy()">Générer ma synthèse →</button>
+
+<div class="sy-wrap" id="synth">
+  <div class="sy-head">
+    <div class="sy-title">Ma synthèse — Questions de fond</div>
+    <button class="copy-btn" onclick="copySy()">Copier</button>
+  </div>
+  <div class="sy-body" id="syBody"></div>
+</div>
+<div class="footer">Auraé — Stratégie · Exercice 2 · Données sauvegardées dans ce navigateur</div>
+</div>
+
+<script>
+var D = {};
+var multiD = {};
+
+function ld(k,d){try{var v=localStorage.getItem('aw2_'+k);return v?JSON.parse(v):d}catch(e){return d}}
+function sv(k,v){localStorage.setItem('aw2_'+k,JSON.stringify(v))}
+
+function selOpt(id,val,el){
+  D[id]=val;sv('D',D);
+  document.querySelectorAll('#'+id+' .opt').forEach(function(o){o.classList.remove('on')});
+  el.classList.add('on');
+}
+
+function toggleMulti(id,val,el){
+  if(!multiD[id])multiD[id]=[];
+  var i=multiD[id].indexOf(val);
+  if(i===-1){multiD[id].push(val);el.classList.add('on')}
+  else{multiD[id].splice(i,1);el.classList.remove('on')}
+  sv('mD',multiD);
+}
+
+function save(){
+  ['q_qui','q_photos_plan','q_objectif','q_canal_resultat','q_opportunite','q_contraintes_detail'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)D[id]=el.value;
+  });
+  sv('D',D);
+}
+
+function genSy(){
+  save();
+  var txt='SYNTHESE - QUESTIONS DE FOND\n==============================\n\n';
+  txt+='RESSOURCES HUMAINES\n';
+  if(D['q_heures'])txt+='Heures/semaine disponibles : '+D['q_heures']+'\n';
+  if(D['q_qui'])txt+='Qui s\'en occupe : '+D['q_qui']+'\n';
+  if(D['q_temps_alloue'])txt+='Temps alloue : '+D['q_temps_alloue']+'\n';
+  txt+='\nRESSOURCES VISUELLES\n';
+  if(D['q_photos'])txt+='Photos disponibles : '+D['q_photos']+'\n';
+  if(D['q_photos_plan'])txt+='Plan pour les photos : '+D['q_photos_plan']+'\n';
+  txt+='\nOBJECTIFS\n';
+  if(D['q_objectif'])txt+='Objectif 6 mois : '+D['q_objectif']+'\n';
+  if(multiD['q_sources']&&multiD['q_sources'].length)txt+='Sources clients actuelles : '+multiD['q_sources'].join(', ')+'\n';
+  if(D['q_canal_resultat'])txt+='Canal ayant deja produit des resultats : '+D['q_canal_resultat']+'\n';
+  txt+='\nBUDGET\n';
+  if(D['q_budget_defini'])txt+='Budget defini : '+D['q_budget_defini']+'\n';
+  if(D['q_budget_montant'])txt+='Montant mensuel : '+D['q_budget_montant']+'\n';
+  if(D['q_budget_type'])txt+='Type de budget : '+D['q_budget_type']+'\n';
+  txt+='\nCONCURRENCE\n';
+  if(D['q_concurrents'])txt+='Concurrents sur les reseaux : '+D['q_concurrents']+'\n';
+  if(D['q_opportunite'])txt+='Opportunites detectees : '+D['q_opportunite']+'\n';
+  txt+='\nCONTRAINTES\n';
+  if(multiD['q_contraintes']&&multiD['q_contraintes'].length)txt+='Contraintes identifiees : '+multiD['q_contraintes'].join(', ')+'\n';
+  if(D['q_contraintes_detail'])txt+='Details : '+D['q_contraintes_detail']+'\n';
+  var sy=document.getElementById('synth');
+  document.getElementById('syBody').textContent=txt;
+  sy.classList.add('show');
+  sy.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function copySy(){
+  navigator.clipboard.writeText(document.getElementById('syBody').textContent).then(function(){
+    var b=document.querySelector('.copy-btn');b.textContent='Copie reussie';setTimeout(function(){b.textContent='Copier'},2000);
+  });
+}
+
+function saveData(){
+  save();
+  var data={D:D,mD:multiD};
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download='questions_fond_aurae.json';a.click();
+  URL.revokeObjectURL(url);
+}
+
+function restoreData(e){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      var d=JSON.parse(ev.target.result);
+      D=d.D||{};multiD=d.mD||{};
+      sv('D',D);sv('mD',multiD);
+      restoreUI();alert('Donnees restaurees.');
+    }catch(err){alert('Fichier invalide.');}
+  };
+  reader.readAsText(file);
+}
+
+function restoreUI(){
+  Object.keys(D).forEach(function(k){
+    var el=document.getElementById(k);
+    if(el&&el.tagName==='TEXTAREA')el.value=D[k];
+    else if(el){
+      el.querySelectorAll('.opt').forEach(function(o){
+        if(o.textContent.trim()===D[k])o.classList.add('on');
+      });
+    }
+  });
+  Object.keys(multiD).forEach(function(k){
+    var cont=document.getElementById(k);
+    if(!cont)return;
+    multiD[k].forEach(function(v){
+      cont.querySelectorAll('.opt').forEach(function(o){
+        if(o.textContent.trim()===v)o.classList.add('on');
+      });
+    });
+  });
+}
+
+D=ld('D',{});multiD=ld('mD',{});
+restoreUI();
+</script>
+</body>
+</html>

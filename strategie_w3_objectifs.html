@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Objectifs par canal - Auraé</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Montserrat:wght@300;400;500;600&family=Lora:ital,wght@0,400;1,400&display=swap');
+:root{--navy:#1B2E3C;--gold:#C49A3C;--rose:#A4514C;--sand:#F4EFE8;--sand2:#EDE7DE;--text:#1B2E3C;--text2:#5A6E78;--text3:#8B9EA8;--border:#C8D5DB;--green:#4E7A72;--sky:#5E8BA0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Montserrat',sans-serif;background:var(--sand);color:var(--text);min-height:100vh}
+.header{background:var(--navy);padding:28px 36px 24px}
+.brand{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.brand-dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.brand-label{font-size:10px;font-weight:500;color:var(--gold);letter-spacing:.2em;text-transform:uppercase}
+.header-title{font-family:'Abril Fatface',cursive;font-size:26px;color:white;margin-bottom:4px}
+.header-title em{color:var(--rose);font-style:italic}
+.header-sub{font-family:'Lora',serif;font-size:12px;color:var(--text3);font-style:italic;margin-bottom:14px}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn-h{border:none;border-radius:8px;padding:8px 16px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s}
+.btn-h.rose{background:var(--rose);color:white}
+.btn-h.sec{background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2)}
+.btn-h:hover{opacity:.85}
+.main{max-width:760px;margin:0 auto;padding:24px 20px}
+.intro{background:white;border-radius:12px;border-left:4px solid var(--gold);border-right:1px solid var(--border);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 18px;margin-bottom:16px;font-family:'Lora',serif;font-size:12px;color:var(--text2);line-height:1.6}
+.canal-block{background:white;border-radius:12px;border:1px solid var(--border);margin-bottom:12px;overflow:hidden}
+.canal-head{padding:14px 18px;background:var(--navy);display:flex;align-items:center;gap:10px}
+.canal-icon{font-size:18px;flex-shrink:0}
+.canal-name{font-size:13px;font-weight:600;color:white;flex:1}
+.canal-body{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.qlabel{font-size:11px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.qtip{font-family:'Lora',serif;font-size:10px;font-style:italic;color:var(--text3);margin-bottom:6px;line-height:1.4}
+.examples{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.example{background:var(--sand);border-radius:7px;padding:7px 10px;font-size:10px;color:var(--text2);cursor:pointer;transition:all .15s;border:1.5px solid transparent;line-height:1.4}
+.example:hover{border-color:var(--rose);background:rgba(164,81,76,0.04)}
+.example.sel{border-color:var(--sky);background:rgba(94,139,160,0.06);color:var(--sky)}
+.example-label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.fi{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:'Montserrat',sans-serif;color:var(--navy);background:var(--sand);outline:none;resize:vertical;line-height:1.5;transition:border-color .15s}
+.fi:focus{border-color:var(--rose);background:white}
+.delai-opts{display:flex;gap:6px;flex-wrap:wrap}
+.opt{border:1.5px solid var(--border);border-radius:7px;padding:5px 11px;cursor:pointer;font-size:10px;font-weight:600;color:var(--text2);transition:all .15s}
+.opt:hover{border-color:var(--rose);color:var(--rose)}
+.opt.on{border-color:var(--sky);background:rgba(94,139,160,0.08);color:var(--sky)}
+.gen-btn{width:100%;background:var(--navy);color:white;border:none;border-radius:10px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;margin-top:4px;transition:background .15s}
+.gen-btn:hover{background:#2C4A5E}
+.sy-wrap{background:white;border-radius:12px;border:1px solid var(--border);padding:22px;margin-top:16px;display:none}
+.sy-wrap.show{display:block}
+.sy-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.sy-title{font-family:'Abril Fatface',cursive;font-size:18px;color:var(--navy)}
+.copy-btn{background:var(--rose);color:white;border:none;border-radius:7px;padding:7px 14px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif}
+.sy-body{font-family:'Lora',serif;font-size:12px;color:var(--text);line-height:1.8;white-space:pre-wrap}
+.footer{text-align:center;padding:12px;font-family:'Lora',serif;font-size:10px;font-style:italic;color:var(--text3)}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="brand"><div class="brand-dot"></div><div class="brand-label">Auraé - Stratégie</div></div>
+  <div class="header-title">Exercice 3 - Mes <em>objectifs</em> par canal</div>
+  <div class="header-sub">Pour chaque canal actif, choisissez un objectif ou rédigez le vôtre. Un objectif vague ne sert à rien.</div>
+  <div class="header-actions">
+    <button class="btn-h rose" onclick="genSy()">Générer ma synthèse</button>
+    <button class="btn-h sec" onclick="saveData()">💾 Sauvegarder</button>
+    <button class="btn-h sec" onclick="document.getElementById('rf').click()">📂 Restaurer</button>
+    <input type="file" id="rf" accept=".json" style="display:none" onchange="restoreData(event)">
+  </div>
+</div>
+<div class="main">
+<div class="intro">
+  Cliquez sur un exemple pour le sélectionner, ou rédigez votre propre objectif dans le champ texte. <strong>Un bon objectif est précis et mesurable</strong> - pas "être plus visible" mais "obtenir 3 contacts par mois via Instagram d'ici 6 mois".
+</div>
+<div id="canaux"></div>
+<button class="gen-btn" onclick="genSy()">Générer ma synthèse →</button>
+<div class="sy-wrap" id="synth">
+  <div class="sy-head">
+    <div class="sy-title">Mes objectifs par canal</div>
+    <button class="copy-btn" onclick="copySy()">Copier</button>
+  </div>
+  <div class="sy-body" id="syBody"></div>
+</div>
+<div class="footer">Auraé - Stratégie · Exercice 3 · Données sauvegardées dans ce navigateur</div>
+</div>
+
+<script>
+var CANAUX = [
+  {id:'instagram',nom:'Instagram',icon:'📸',
+   examples:['Obtenir 2 à 3 demandes de contact par mois via Instagram d\'ici 6 mois','Atteindre 500 abonnés qualifiés (particuliers CSP+ et architectes) d\'ici 6 mois','Publier 3 fois par semaine de manière régulière pendant 6 mois sans interruption','Obtenir au moins 1 prise de contact qualifiée par semaine grâce au contenu']},
+  {id:'linkedin',nom:'LinkedIn',icon:'💼',
+   examples:['Obtenir 3 prises de contact d\'architectes ou prescripteurs par trimestre','Atteindre 300 abonnés sur la page entreprise d\'ici 6 mois','Générer 2 rendez-vous B2B par mois grâce à LinkedIn','Avoir 5 profils actifs dans l\'entreprise qui publient régulièrement']},
+  {id:'pinterest',nom:'Pinterest',icon:'📌',
+   examples:['Atteindre 5 000 impressions mensuelles d\'ici 6 mois','Générer 100 clics vers le site internet par mois via Pinterest','Créer 5 épingles par semaine pendant 6 mois sans interruption']},
+  {id:'google_biz',nom:'Google Business',icon:'📍',
+   examples:['Atteindre 30 avis avec une note moyenne de 4,8 d\'ici 6 mois','Recevoir au moins 5 appels téléphoniques par mois via la fiche Google','Publier 1 Google Post par semaine pendant 3 mois','Obtenir 10 nouveaux avis clients dans les 3 prochains mois']},
+  {id:'site',nom:'Site internet',icon:'🌐',
+   examples:['Générer 5 demandes de devis par mois via le formulaire de contact','Améliorer le positionnement Google sur les mots clés principaux (nom du métier + ville)','Atteindre 500 visiteurs uniques par mois d\'ici 6 mois','Réduire le taux de rebond de 30% grâce à une refonte du contenu']},
+  {id:'facebook',nom:'Facebook',icon:'👥',
+   examples:['Maintenir une publication par semaine pour ne pas paraître abandonné','Générer 2 demandes de contact par mois via Facebook','Atteindre 500 abonnés sur la page d\'ici 6 mois']},
+  {id:'gads',nom:'Google Ads',icon:'🎯',
+   examples:['Obtenir 10 clics qualifiés par semaine avec un budget de X euros/mois','Obtenir un coût par lead inférieur à 30 euros','Générer 5 demandes de devis par mois via les campagnes Google Ads']},
+  {id:'newsletter',nom:'Newsletter',icon:'📧',
+   examples:['Envoyer une newsletter trimestrielle à toute la base clients','Obtenir un taux d\'ouverture supérieur à 25%','Générer 1 relance de prospect par email chaque mois']},
+];
+
+var D={};
+
+function ld(k,d){try{var v=localStorage.getItem('aw3_'+k);return v?JSON.parse(v):d}catch(e){return d}}
+function sv(k,v){localStorage.setItem('aw3_'+k,JSON.stringify(v))}
+
+function build(){
+  D=ld('D',{});
+  var cont=document.getElementById('canaux');
+  cont.innerHTML='';
+  CANAUX.forEach(function(c){
+    var d=D[c.id]||{};
+    var exHtml=c.examples.map(function(e,i){
+      var sel=(d.exemple===e)?'sel':'';
+      return '<div class="example '+sel+'" onclick="selEx(\''+c.id+'\',\''+e.replace(/'/g,"\\'")+'\',this)">'+e+'</div>';
+    }).join('');
+    var block=document.createElement('div');
+    block.className='canal-block';
+    block.innerHTML='<div class="canal-head"><div class="canal-icon">'+c.icon+'</div><div class="canal-name">'+c.nom+'</div></div>'
+      +'<div class="canal-body">'
+      +'<div><div class="example-label">Exemples d\'objectifs - cliquez pour sélectionner</div>'+exHtml+'</div>'
+      +'<div><div class="qlabel">Ou rédigez votre propre objectif</div>'
+      +'<textarea class="fi" id="obj_'+c.id+'" rows="2" placeholder="ex : Obtenir 3 contacts qualifiés par mois via ce canal d\'ici 6 mois" oninput="saveText(\''+c.id+'\')">'+(d.custom||'')+'</textarea></div>'
+      +'<div><div class="qlabel">Délai</div>'
+      +'<div class="delai-opts" id="del_'+c.id+'">'
+      +'<div class="opt'+(d.delai==='3 mois'?' on':'')+'" onclick="setDelai(\''+c.id+'\',\'3 mois\',this)">3 mois</div>'
+      +'<div class="opt'+(d.delai==='6 mois'?' on':'')+'" onclick="setDelai(\''+c.id+'\',\'6 mois\',this)">6 mois</div>'
+      +'<div class="opt'+(d.delai==='12 mois'?' on':'')+'" onclick="setDelai(\''+c.id+'\',\'12 mois\',this)">12 mois</div>'
+      +'</div></div>'
+      +'</div>';
+    cont.appendChild(block);
+  });
+}
+
+function selEx(cid,val,el){
+  if(!D[cid])D[cid]={};
+  D[cid].exemple=val;
+  sv('D',D);
+  el.closest('.canal-body').querySelectorAll('.example').forEach(function(e){e.classList.remove('sel')});
+  el.classList.add('sel');
+}
+
+function saveText(cid){
+  if(!D[cid])D[cid]={};
+  var el=document.getElementById('obj_'+cid);
+  if(el)D[cid].custom=el.value;
+  sv('D',D);
+}
+
+function setDelai(cid,val,el){
+  if(!D[cid])D[cid]={};
+  D[cid].delai=val;
+  sv('D',D);
+  el.closest('.delai-opts').querySelectorAll('.opt').forEach(function(o){o.classList.remove('on')});
+  el.classList.add('on');
+}
+
+function genSy(){
+  var txt='SYNTHESE - OBJECTIFS PAR CANAL\n================================\n\n';
+  CANAUX.forEach(function(c){
+    var d=D[c.id]||{};
+    var obj=d.custom||d.exemple||'';
+    if(!obj&&!d.delai)return;
+    txt+=c.icon+' '+c.nom+'\n';
+    if(obj)txt+='Objectif : '+obj+'\n';
+    if(d.delai)txt+='Delai : '+d.delai+'\n';
+    txt+='\n';
+  });
+  if(txt.trim()==='SYNTHESE - OBJECTIFS PAR CANAL\n================================')txt+='Aucun objectif defini pour l\'instant.\n';
+  var sy=document.getElementById('synth');
+  document.getElementById('syBody').textContent=txt;
+  sy.classList.add('show');
+  sy.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function copySy(){
+  navigator.clipboard.writeText(document.getElementById('syBody').textContent).then(function(){
+    var b=document.querySelector('.copy-btn');b.textContent='Copie reussie';setTimeout(function(){b.textContent='Copier'},2000);
+  });
+}
+
+function saveData(){
+  var blob=new Blob([JSON.stringify(D,null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download='objectifs_canaux_aurae.json';a.click();
+  URL.revokeObjectURL(url);
+}
+
+function restoreData(e){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    try{D=JSON.parse(ev.target.result);sv('D',D);build();alert('Donnees restaurees.');}
+    catch(err){alert('Fichier invalide.');}
+  };
+  reader.readAsText(file);
+}
+
+build();
+</script>
+</body>
+</html>
