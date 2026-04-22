@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analyse de ma cible — Auraé</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Montserrat:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap');
+:root{--navy:#1B2E3C;--navy2:#2C4A5E;--gold:#C49A3C;--rose:#A4514C;--sand:#F4EFE8;--sand2:#EDE7DE;--green:#4E7A72;--text:#1B2E3C;--text2:#5A6E78;--text3:#8B9EA8;--border:#C8D5DB}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Montserrat',sans-serif;background:var(--sand);color:var(--text);min-height:100vh}
+.header{background:var(--navy);padding:32px 40px 28px}
+.brand{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.brand-dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.brand-label{font-size:10px;font-weight:500;color:var(--gold);letter-spacing:.2em;text-transform:uppercase}
+.header-title{font-family:'Abril Fatface',cursive;font-size:32px;color:white;line-height:1.1;margin-bottom:6px}
+.header-title em{color:var(--rose);font-style:italic}
+.header-sub{font-family:'Lora',serif;font-size:13px;color:var(--text3);font-style:italic}
+.progress-wrap{background:rgba(255,255,255,0.06);border-radius:8px;padding:14px 20px;margin-top:20px;display:flex;align-items:center;gap:16px}
+.progress-bar{flex:1;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--rose);border-radius:2px;transition:width .4s ease}
+.progress-text{font-size:11px;color:var(--text3);white-space:nowrap}
+.main{max-width:720px;margin:0 auto;padding:32px 24px}
+.section{background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:20px;overflow:hidden}
+.section-head{padding:18px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.section-num{font-family:'Abril Fatface',cursive;font-size:22px;color:var(--rose);line-height:1;flex-shrink:0}
+.section-title{font-size:13px;font-weight:600;color:var(--navy);text-transform:uppercase;letter-spacing:.06em}
+.section-desc{font-family:'Lora',serif;font-size:12px;font-style:italic;color:var(--text3);margin-top:2px}
+.section-body{padding:20px 24px}
+.question{margin-bottom:20px}
+.question:last-child{margin-bottom:0}
+.q-label{font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px}
+.q-tip{font-family:'Lora',serif;font-size:11px;font-style:italic;color:var(--text3);margin-bottom:8px;line-height:1.5}
+.q-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:'Montserrat',sans-serif;color:var(--navy);background:var(--sand);outline:none;transition:border-color .15s;resize:vertical;line-height:1.6}
+.q-input:focus{border-color:var(--rose);background:white}
+.q-input.short{min-height:44px;resize:none}
+.q-input.medium{min-height:80px}
+.q-input.tall{min-height:120px}
+.q-input.xtall{min-height:180px}
+.exemple{background:var(--sand2);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:10px;font-family:'Lora',serif;font-size:11px;font-style:italic;color:var(--text2);line-height:1.6}
+.exemple strong{font-style:normal;font-size:10px;font-family:'Montserrat',sans-serif;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px}
+.generate-section{background:white;border-radius:14px;border:1px solid var(--border);padding:28px 24px;text-align:center;margin-bottom:20px}
+.generate-title{font-family:'Abril Fatface',cursive;font-size:22px;color:var(--navy);margin-bottom:8px}
+.generate-sub{font-family:'Lora',serif;font-size:13px;font-style:italic;color:var(--text3);margin-bottom:20px}
+.generate-btn{background:var(--navy);color:white;border:none;border-radius:10px;padding:14px 32px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;letter-spacing:.05em;transition:background .15s;width:100%}
+.generate-btn:hover{background:var(--navy2)}
+.generate-btn:disabled{background:var(--text3);cursor:not-allowed}
+.result{background:white;border-radius:14px;border:1px solid var(--border);padding:28px 24px;display:none}
+.result.show{display:block}
+.result-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.result-title{font-family:'Abril Fatface',cursive;font-size:20px;color:var(--navy)}
+.copy-btn{background:var(--rose);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:background .15s}
+.copy-btn:hover{background:#8F3F3A}
+.result-body{font-family:'Lora',serif;font-size:13px;color:var(--text);line-height:1.8;white-space:pre-wrap}
+.loading{text-align:center;padding:32px}
+.spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--rose);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-family:'Lora',serif;font-size:13px;font-style:italic;color:var(--text3)}
+.footer{text-align:center;padding:16px;font-family:'Lora',serif;font-size:11px;font-style:italic;color:var(--text3)}
+.interview-block{background:var(--sand);border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid var(--border)}
+.interview-label{font-size:10px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand"><div class="brand-dot"></div><div class="brand-label">Auraé — L'Ancrage</div></div>
+  <div class="header-title">Analyse de <em>ma cible</em></div>
+  <div class="header-sub">Répondez avec précision. Chaque détail compte pour comprendre vraiment à qui vous parlez.</div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-text" id="progressText">0 / 7 sections</div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- SECTION 1 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">01</div>
+    <div>
+      <div class="section-title">Vos clients actuels</div>
+      <div class="section-desc">Un portrait honnête de qui vous paie vraiment aujourd'hui</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Décrivez votre client type actuel — pas un profil idéal, celui que vous avez vraiment</div>
+      <div class="q-tip">Regardez vos 10 dernières factures. Qui sont ces gens ? Particuliers ou pros ? Quel type de projet ? Quel niveau de budget ?</div>
+      <textarea class="q-input tall" id="q_clients_actuels" placeholder="ex : Majoritairement des particuliers entre 45 et 65 ans, propriétaires de maisons des années 80-90, qui veulent remplacer des fenêtres vieillissantes. Budget moyen 8 à 15k€. Quelques architectes mais pas encore beaucoup." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Y a-t-il un écart entre les clients que vous avez et ceux que vous voulez ? Lequel ?</div>
+      <textarea class="q-input medium" id="q_ecart" placeholder="ex : On a surtout des clients qui cherchent un bon rapport qualité-prix. On voudrait attirer plus de clients haut de gamme et des architectes, mais on n'a pas encore la visibilité pour ça." oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">02</div>
+    <div>
+      <div class="section-title">Interviews clients — ce qu'ils disent vraiment</div>
+      <div class="section-desc">Les verbatims de vos clients interrogés. Mot pour mot, sans filtre.</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="q-tip" style="margin-bottom:14px">Posez ces questions à 3 à 5 clients récents : Pourquoi nous avez-vous choisis ? Qu'est-ce qui vous a rassuré ? Qu'est-ce qui vous a fait hésiter ? Qu'est-ce que vous diriez à quelqu'un qui hésite à faire appel à nous ? Retranscrivez leurs réponses ci-dessous.</div>
+
+    <div class="interview-block">
+      <div class="interview-label">Client 1</div>
+      <div class="question" style="margin-bottom:10px">
+        <div class="q-label">Pourquoi nous avez-vous choisis ?</div>
+        <textarea class="q-input medium" id="q_c1_choix" placeholder="Retranscrivez ses mots exacts..." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="question" style="margin-bottom:10px">
+        <div class="q-label">Qu'est-ce qui vous a rassuré ?</div>
+        <textarea class="q-input medium" id="q_c1_rassure" placeholder="Retranscrivez ses mots exacts..." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="question">
+        <div class="q-label">Qu'est-ce que vous diriez à quelqu'un qui hésite ?</div>
+        <textarea class="q-input medium" id="q_c1_recommande" placeholder="Retranscrivez ses mots exacts..." oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+
+    <div class="interview-block">
+      <div class="interview-label">Client 2</div>
+      <div class="question" style="margin-bottom:10px">
+        <div class="q-label">Pourquoi nous avez-vous choisis ?</div>
+        <textarea class="q-input medium" id="q_c2_choix" placeholder="Retranscrivez ses mots exacts..." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="question" style="margin-bottom:10px">
+        <div class="q-label">Qu'est-ce qui vous a rassuré ?</div>
+        <textarea class="q-input medium" id="q_c2_rassure" placeholder="Retranscrivez ses mots exacts..." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="question">
+        <div class="q-label">Qu'est-ce que vous diriez à quelqu'un qui hésite ?</div>
+        <textarea class="q-input medium" id="q_c2_recommande" placeholder="Retranscrivez ses mots exacts..." oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+
+    <div class="interview-block">
+      <div class="interview-label">Client 3 (optionnel)</div>
+      <div class="question" style="margin-bottom:10px">
+        <div class="q-label">Pourquoi nous avez-vous choisis ?</div>
+        <textarea class="q-input medium" id="q_c3_choix" placeholder="Retranscrivez ses mots exacts..." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="question">
+        <div class="q-label">Ce qui l'a le plus surpris positivement</div>
+        <textarea class="q-input medium" id="q_c3_surprise" placeholder="Retranscrivez ses mots exacts..." oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">03</div>
+    <div>
+      <div class="section-title">Freins, peurs et objections</div>
+      <div class="section-desc">Ce qui bloque vos clients avant de signer — les vraies raisons</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Quelles sont les questions que les clients posent avant de signer ? Celles qui reviennent systématiquement ?</div>
+      <div class="q-tip">Ce sont souvent des questions sur le prix, les délais, les garanties, la fiabilité. Notez-les telles quelles.</div>
+      <div class="exemple"><strong>Exemples typiques</strong>"Est-ce que vous allez vraiment finir dans les délais ?" — "Et si ça se passe mal, qui est responsable ?" — "Vous avez des références dans notre secteur ?" — "Pourquoi vous êtes moins chers que l'autre ?" ou au contraire "Pourquoi vous êtes plus chers ?"</div>
+      <textarea class="q-input tall" id="q_questions_recurrentes" placeholder="Listez les questions que vous entendez le plus souvent..." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Qu'est-ce qui fait qu'un prospect ne vous rappelle pas après un devis ? Quelle est la vraie raison selon vous ?</div>
+      <div class="q-tip">Pas la raison officielle (trop cher, pas le bon moment). La vraie raison sous-jacente.</div>
+      <textarea class="q-input medium" id="q_non_rappel" placeholder="ex : Ils ne comprennent pas pourquoi on est plus chers. Ils ont peur de se tromper. Ils ne nous connaissent pas assez." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Quelle est la peur principale de votre client avant de signer ? Celle qu'il n'ose pas toujours exprimer.</div>
+      <div class="q-tip">La peur de se faire avoir ? De choisir le mauvais ? D'être livré en retard ? D'avoir des travaux mal finis ? D'un conflit ?</div>
+      <div class="exemple"><strong>Exemple de réponse profonde</strong>"La peur principale c'est de choisir la mauvaise entreprise et de le regretter. Ils ont souvent entendu des histoires d'horreur de leurs voisins. Ils veulent une garantie humaine, pas juste commerciale."</div>
+      <textarea class="q-input tall" id="q_peur_principale" placeholder="Quelle est la peur qui les paralyse le plus ?" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Y a-t-il des objections spécifiques liées à votre secteur ou votre zone géographique ?</div>
+      <textarea class="q-input medium" id="q_objections_specifiques" placeholder="ex : Les clients comparent souvent avec le PVC qui est moins cher. Certains pensent que l'alu c'est froid ou industriel. D'autres ne savent pas que nos délais peuvent être plus courts." oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">04</div>
+    <div>
+      <div class="section-title">Parcours de recherche</div>
+      <div class="section-desc">Comment votre cible cherche un menuisier — étape par étape</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Selon vous, comment un client qui veut refaire ses fenêtres ou installer une baie vitrante commence-t-il sa recherche ?</div>
+      <div class="q-tip">Pensez aux étapes : il commence comment ? Il va où en premier ? Qu'est-ce qui déclenche l'appel ?</div>
+      <div class="exemple"><strong>Parcours typique à compléter avec votre réalité</strong>Il a un projet depuis quelques mois → il cherche sur Google → il regarde les avis → il va sur Instagram voir des réalisations → il demande à ses voisins → il prend 2 ou 3 devis → il hésite pendant 3 semaines → il signe.</div>
+      <textarea class="q-input tall" id="q_parcours_recherche" placeholder="Décrivez le parcours de recherche de votre client type..." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Qu'est-ce qui déclenche le vrai passage à l'action — l'appel ou le formulaire de contact ?</div>
+      <div class="q-tip">Pas ce qui intéresse, ce qui déclenche l'action concrète. Une photo ? Un avis ? Une recommandation ? Un événement dans leur vie ?</div>
+      <textarea class="q-input medium" id="q_declencheur" placeholder="ex : Le plus souvent c'est une recommandation d'un ami ou un avis Google très détaillé. Ou ils ont vu une réalisation similaire à ce qu'ils veulent." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Quels mots clés tapent-ils dans Google selon vous ? Soyez précis.</div>
+      <textarea class="q-input medium" id="q_mots_cles_google" placeholder="ex : 'menuiserie aluminium [ville]', 'pose baie vitrante [département]', 'fenêtres aluminium sur mesure pas cher', 'meilleur menuisier [ville] avis'" oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">05</div>
+    <div>
+      <div class="section-title">Usage des réseaux sociaux</div>
+      <div class="section-desc">Comment votre cible utilise Instagram, LinkedIn et Pinterest</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Est-ce que votre cible principale est active sur Instagram ? Comment l'utilise-t-elle ?</div>
+      <div class="q-tip">Cherche-t-elle des réalisations ? Des inspirations ? Des avis indirects sur une entreprise ? Ou n'est-elle pas sur Instagram du tout ?</div>
+      <textarea class="q-input medium" id="q_instagram_usage" placeholder="ex : Oui, nos clients particuliers 45-60 ans cherchent des photos de réalisations et regardent les commentaires. Ils likent mais ne commentent pas beaucoup. Certains envoient des DM directement." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Sur Instagram, quel type de contenu les arrête selon vous ? Qu'est-ce qui leur donne envie d'appeler ?</div>
+      <textarea class="q-input medium" id="q_instagram_contenu" placeholder="ex : Les avant/après d'une façade transformée. Les réalisations sur des maisons similaires à la leur. Les avis clients mis en valeur. Pas les photos de profil ou les coulisses — ils veulent voir le résultat." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Votre cible est-elle sur LinkedIn ? Dans quel contexte ?</div>
+      <div class="q-tip">Surtout pertinent si vous visez des architectes, promoteurs ou décideurs BTP.</div>
+      <textarea class="q-input medium" id="q_linkedin_usage" placeholder="ex : Les architectes qu'on cible sont sur LinkedIn mais peu actifs. Ils utilisent LinkedIn pour leur réseau pro mais ne cherchent pas de prestataires par là. Par contre une belle présence LinkedIn les rassure." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Et Pinterest — votre cible utilise-t-elle Pinterest dans son parcours de projet ?</div>
+      <textarea class="q-input medium" id="q_pinterest_usage" placeholder="ex : Oui, surtout les femmes de notre cible particulier qui font des boards d'inspiration avant de lancer leur projet. Elles cherchent 'fenêtres aluminium', 'baie vitrante salon', 'véranda moderne'." oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">06</div>
+    <div>
+      <div class="section-title">Analyse des avis Google</div>
+      <div class="section-desc">Collez vos avis ici — l'IA va en extraire les insights cible</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="q-tip" style="margin-bottom:12px">Copiez-collez tous vos avis Google ci-dessous. L'IA va analyser ce que vos clients disent spontanément pour identifier les patterns de votre cible réelle — ses mots, ses peurs, ses critères de choix.</div>
+    <div class="exemple"><strong>Astuce Google Business</strong>Dans votre interface Google Business, les mots clés utilisés dans les avis sont classés par occurrences. Exemple : 'équipe (9)', 'délais (7)', 'propre (5)'. Ces mots révèlent ce que vos clients retiennent vraiment.</div>
+    <div class="question">
+      <div class="q-label">Vos avis Google (copiez-collez tout)</div>
+      <textarea class="q-input xtall" id="q_avis_google" placeholder="Copiez-collez vos avis Google ici, avec ou sans le nom du client, avec ou sans la note. L'IA analysera le contenu uniquement." oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7 -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">07</div>
+    <div>
+      <div class="section-title">Votre cible idéale</div>
+      <div class="section-desc">Celle que vous voulez attirer — pas celle que vous avez</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <div class="q-label">Décrivez votre client idéal — celui avec qui tout se passe parfaitement et que vous voudriez multiplier</div>
+      <textarea class="q-input tall" id="q_client_ideal" placeholder="ex : Un propriétaire d'une belle maison qui a un vrai projet, qui est exigeant mais respectueux, qui ne cherche pas le moins cher mais la tranquillité d'esprit. Il a déjà travaillé avec des artisans et sait comment ça se passe." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">Qu'est-ce que ce client idéal veut ressentir en choisissant votre entreprise ? Pas ce qu'il veut acheter — ce qu'il veut ressentir.</div>
+      <div class="exemple"><strong>Réflexion clé</strong>Les clients n'achètent pas des fenêtres. Ils achètent la tranquillité d'esprit, la fierté de leur maison, la confiance que ça va bien se passer. Qu'est-ce que votre cible idéale veut ressentir ?</div>
+      <textarea class="q-input tall" id="q_ressenti" placeholder="ex : La certitude qu'il n'y aura pas de mauvaise surprise. La fierté de montrer le résultat à ses voisins. Le sentiment d'avoir fait le bon choix et d'avoir été bien conseillé." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="question">
+      <div class="q-label">S'il fallait lui écrire un message en 2 phrases qui le touche vraiment, ce serait quoi ?</div>
+      <div class="q-tip">Pas un slogan. Un message sincère qui montre que vous le comprenez.</div>
+      <textarea class="q-input medium" id="q_message_cible" placeholder="ex : 'Vous avez un projet qui compte. Vous méritez une entreprise qui le prend aussi au sérieux que vous.'" oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- GENERATE -->
+<div class="generate-section">
+  <div class="generate-title">Générer mon analyse de cible</div>
+  <div class="generate-sub">L'IA va analyser toutes vos réponses — interviews, freins, parcours, avis Google — et produire une analyse complète de votre cible avec des recommandations concrètes pour votre communication.</div>
+  <button class="generate-btn" id="generateBtn" onclick="generate()">Générer mon analyse de cible →</button>
+</div>
+
+<div class="result" id="result">
+  <div class="result-head">
+    <div class="result-title">Votre analyse de cible</div>
+    <button class="copy-btn" onclick="copyResult()">Copier tout</button>
+  </div>
+  <div id="loadingDiv" class="loading">
+    <div class="spinner"></div>
+    <div class="loading-text">L'IA analyse vos réponses et vos avis Google...</div>
+  </div>
+  <div class="result-body" id="resultBody" style="display:none"></div>
+</div>
+
+<div class="footer">Auraé — L'Ancrage · Ce document est confidentiel</div>
+</div>
+
+<script>
+const FIELDS=['q_clients_actuels','q_ecart','q_c1_choix','q_c1_rassure','q_c1_recommande',
+  'q_c2_choix','q_c2_rassure','q_c2_recommande','q_questions_recurrentes','q_non_rappel',
+  'q_peur_principale','q_objections_specifiques','q_parcours_recherche','q_declencheur',
+  'q_mots_cles_google','q_instagram_usage','q_instagram_contenu','q_linkedin_usage',
+  'q_pinterest_usage','q_avis_google','q_client_ideal','q_ressenti','q_message_cible'];
+
+function updateProgress(){
+  const filled=FIELDS.filter(id=>document.getElementById(id)?.value?.trim().length>10).length;
+  const pct=Math.round((filled/FIELDS.length)*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+  const sections=Math.round((filled/FIELDS.length)*7);
+  document.getElementById('progressText').textContent=`${sections} / 7 sections`;
+}
+
+function v(id){return document.getElementById(id)?.value?.trim()||'(non renseigné)'}
+
+async function generate(){
+  const btn=document.getElementById('generateBtn');
+  const result=document.getElementById('result');
+  const loading=document.getElementById('loadingDiv');
+  const body=document.getElementById('resultBody');
+  btn.disabled=true;btn.textContent='Génération en cours...';
+  result.classList.add('show');loading.style.display='block';body.style.display='none';
+  result.scrollIntoView({behavior:'smooth',block:'start'});
+
+  const prompt=`Tu es un expert en stratégie de communication spécialisé dans les entreprises artisanales et PME du BTP, notamment la menuiserie extérieure aluminium. Tu vas produire une analyse de cible complète et actionnelle à partir des réponses d'un chargé de communication ou dirigeant.
+
+Ton objectif : produire un document de référence que cette entreprise utilisera pour orienter toute sa communication — les mots à utiliser, les peurs à adresser, le parcours client à activer, les leviers Instagram/LinkedIn/Pinterest à prioriser.
+
+DONNÉES COLLECTÉES :
+
+CLIENTS ACTUELS
+- Portrait actuel : ${v('q_clients_actuels')}
+- Écart avec la cible voulue : ${v('q_ecart')}
+
+INTERVIEWS CLIENTS
+Client 1 — Pourquoi nous a-t-il choisis : ${v('q_c1_choix')}
+Client 1 — Ce qui l'a rassuré : ${v('q_c1_rassure')}
+Client 1 — Ce qu'il dirait à quelqu'un qui hésite : ${v('q_c1_recommande')}
+Client 2 — Pourquoi nous a-t-il choisis : ${v('q_c2_choix')}
+Client 2 — Ce qui l'a rassuré : ${v('q_c2_rassure')}
+Client 2 — Ce qu'il dirait à quelqu'un qui hésite : ${v('q_c2_recommande')}
+Client 3 — Pourquoi nous a-t-il choisis : ${v('q_c3_choix')}
+Client 3 — Ce qui l'a surpris positivement : ${v('q_c3_surprise')}
+
+FREINS ET PEURS
+- Questions récurrentes avant signature : ${v('q_questions_recurrentes')}
+- Pourquoi les prospects ne rappellent pas : ${v('q_non_rappel')}
+- Peur principale non exprimée : ${v('q_peur_principale')}
+- Objections spécifiques au secteur/zone : ${v('q_objections_specifiques')}
+
+PARCOURS DE RECHERCHE
+- Parcours complet : ${v('q_parcours_recherche')}
+- Ce qui déclenche l'appel : ${v('q_declencheur')}
+- Mots clés Google : ${v('q_mots_cles_google')}
+
+USAGE DES RÉSEAUX SOCIAUX
+- Instagram : ${v('q_instagram_usage')}
+- Contenu Instagram qui fonctionne : ${v('q_instagram_contenu')}
+- LinkedIn : ${v('q_linkedin_usage')}
+- Pinterest : ${v('q_pinterest_usage')}
+
+AVIS GOOGLE
+${v('q_avis_google')}
+
+CIBLE IDÉALE
+- Portrait : ${v('q_client_ideal')}
+- Ce qu'elle veut ressentir : ${v('q_ressenti')}
+- Message qui la touche : ${v('q_message_cible')}
+
+---
+
+Produis l'analyse complète dans ce format exact :
+
+═══════════════════════════════════
+ANALYSE DE CIBLE — [NOM DE L'ENTREPRISE SI MENTIONNÉ, SINON "VOTRE ENTREPRISE"]
+═══════════════════════════════════
+
+QUI EST VRAIMENT VOTRE CIBLE AUJOURD'HUI
+[Portrait précis et honnête de la cible actuelle, avec ce qui la distingue. 3 à 5 phrases.]
+
+QUI VOUS VOULEZ ATTIRER
+[Portrait de la cible idéale, avec les critères qui la définissent. Ce qui la distingue de la cible actuelle. 3 à 5 phrases.]
+
+SES MOTS — CE QU'ELLE DIT VRAIMENT
+[8 à 15 expressions exactes extraites des interviews et avis Google. Ce sont les mots à réutiliser dans toute la communication. Présenter sous forme de liste courte avec des guillemets.]
+
+SES PEURS — CE QUI LA BLOQUE VRAIMENT
+[Les 3 à 5 peurs profondes identifiées, avec pour chacune : le nom de la peur, ce qui la nourrit, et comment y répondre concrètement dans la communication.]
+
+SON PARCOURS DE RECHERCHE
+[Reconstitution étape par étape du parcours. De la prise de conscience du besoin jusqu'à la signature. Identifier les points de contact clés où votre communication peut intervenir.]
+
+CE QUI DÉCLENCHE L'APPEL
+[Les 2 à 3 déclencheurs identifiés. Pour chacun : le déclencheur, ce qu'il révèle sur la cible, comment l'activer dans votre communication.]
+
+RÉSEAUX SOCIAUX — CE QUI FONCTIONNE POUR CETTE CIBLE
+Instagram : [Analyse de l'usage réel + 3 recommandations concrètes de contenu pour cette cible spécifique]
+LinkedIn : [Pertinence pour cette cible + recommandation d'usage]
+Pinterest : [Pertinence pour cette cible + recommandation d'usage]
+
+CE QUE VOS AVIS GOOGLE RÉVÈLENT
+[Analyse des patterns des avis : les mots récurrents, ce que les clients retiennent vraiment, l'écart éventuel entre ce que vous pensez vendre et ce que les clients achètent réellement.]
+
+LES 5 MESSAGES QUI TOUCHENT VRAIMENT CETTE CIBLE
+[5 messages courts et percutants ancrés dans les peurs, les mots et les désirs identifiés. Pas des slogans — des messages vrais que cette cible reconnaîtrait comme lui parlant directement.]
+
+CE QUE CETTE ANALYSE CHANGE DANS VOTRE COMMUNICATION
+[3 à 5 recommandations concrètes et prioritaires sur ce que vous devez changer ou accentuer immédiatement dans votre communication, en fonction de tout ce qui précède.]
+
+═══════════════════════════════════
+NOTE POUR L'ACCOMPAGNEMENT AURAÉ
+[2 à 3 phrases adressées à Élodie (la consultante) sur ce qui est particulièrement intéressant dans cette analyse, ce qui mérite d'être approfondi en session, et les points d'attention pour la stratégie de communication.]
+═══════════════════════════════════
+
+Ton niveau d'exigence doit être élevé. Exploite chaque verbatim, chaque avis Google, chaque détail. Le résultat doit être quelque chose que cette entreprise ne pourrait pas produire seule.`;
+
+  try{
+    const response=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:3500,
+        messages:[{role:"user",content:prompt}]})
+    });
+    const data=await response.json();
+    const text=data.content[0].text;
+    loading.style.display='none';body.style.display='block';body.textContent=text;
+    btn.textContent='✓ Analyse générée — vous pouvez relancer';btn.disabled=false;
+  }catch(e){
+    loading.innerHTML='<p style="color:var(--rose);font-family:Montserrat,sans-serif;font-size:13px">Une erreur est survenue. Vérifiez votre connexion et réessayez.</p>';
+    btn.disabled=false;btn.textContent='Réessayer →';
+  }
+}
+
+function copyResult(){
+  const text=document.getElementById('resultBody').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.querySelector('.copy-btn');
+    btn.textContent='✓ Copié';setTimeout(()=>btn.textContent='Copier tout',2000);
+  });
+}
+</script>
+</body>
+</html>
