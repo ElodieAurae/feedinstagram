@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit de présence digitale — Auraé</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Montserrat:wght@300;400;500;600&family=Lora:ital,wght@0,400;1,400&display=swap');
+:root{--navy:#1B2E3C;--gold:#C49A3C;--rose:#A4514C;--sand:#F4EFE8;--sand2:#EDE7DE;--text:#1B2E3C;--text2:#5A6E78;--text3:#8B9EA8;--border:#C8D5DB;--green:#4E7A72;--sky:#5E8BA0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Montserrat',sans-serif;background:var(--sand);color:var(--text);min-height:100vh}
+.header{background:var(--navy);padding:28px 36px 24px}
+.brand{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.brand-dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.brand-label{font-size:10px;font-weight:500;color:var(--gold);letter-spacing:.2em;text-transform:uppercase}
+.htitle{font-family:'Abril Fatface',cursive;font-size:26px;color:white;margin-bottom:4px}
+.htitle em{color:var(--rose);font-style:italic}
+.hsub{font-family:'Lora',serif;font-size:12px;color:var(--text3);font-style:italic;margin-bottom:14px}
+.hactions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:none;border-radius:8px;padding:8px 16px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .15s}
+.btn.rose{background:var(--rose);color:white}
+.btn.sec{background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2)}
+.btn:hover{opacity:.85}
+.main{max-width:840px;margin:0 auto;padding:24px 20px}
+.intro{background:white;border-radius:12px;border:1px solid var(--border);border-left:4px solid var(--gold);padding:14px 18px;margin-bottom:16px;font-family:'Lora',serif;font-size:12px;color:var(--text2);line-height:1.7}
+.section{background:white;border-radius:12px;border:1px solid var(--border);margin-bottom:12px;overflow:hidden}
+.shead{padding:12px 20px;background:var(--navy);display:flex;align-items:center;gap:10px}
+.sico{font-size:16px}
+.sname{font-size:11px;font-weight:600;color:white;flex:1;text-transform:uppercase;letter-spacing:.08em}
+.sbody{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.canal{border:1.5px solid var(--border);border-radius:10px;overflow:hidden}
+.canal-head{padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;transition:background .15s}
+.canal-head:hover{background:var(--sand)}
+.canal-ico{font-size:15px;flex-shrink:0;width:20px;text-align:center}
+.canal-name{font-size:12px;font-weight:600;color:var(--navy);flex:1}
+.ctag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;flex-shrink:0}
+.t-ind{background:rgba(196,154,60,0.12);color:var(--gold)}
+.t-res{background:rgba(94,139,160,0.12);color:var(--sky)}
+.t-aut{background:rgba(90,110,120,0.1);color:var(--text3)}
+.cst{font-size:9px;font-weight:600;padding:2px 8px;border-radius:20px;flex-shrink:0}
+.st-oui{background:rgba(78,122,114,0.1);color:var(--green)}
+.st-non{background:rgba(164,81,76,0.1);color:var(--rose)}
+.st-nd{background:var(--sand2);color:var(--text3)}
+.carr{font-size:9px;color:var(--text3);transition:transform .2s;flex-shrink:0;margin-left:4px}
+.canal-body{display:none;padding:12px 14px 14px;border-top:1px solid var(--sand2)}
+.canal-body.open{display:block}
+.grp{border:1px solid var(--sand2);border-radius:8px;overflow:hidden;margin-bottom:8px}
+.grp:last-child{margin-bottom:0}
+.grp-title{padding:7px 12px;background:var(--sand2);font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+.grp-body{padding:10px 12px;display:flex;flex-direction:column;gap:9px}
+.qblock{display:flex;flex-direction:column;gap:5px}
+.qlabel{font-size:11px;font-weight:600;color:var(--navy)}
+.qtip{font-family:'Lora',serif;font-size:10px;font-style:italic;color:var(--text3);line-height:1.4}
+.opts{display:flex;flex-wrap:wrap;gap:5px}
+.opt{border:1.5px solid var(--border);border-radius:7px;padding:4px 10px;cursor:pointer;font-size:10px;font-weight:600;color:var(--text2);transition:all .15s;background:white;user-select:none}
+.opt:hover{border-color:var(--rose);color:var(--rose)}
+.opt.on{border-color:var(--sky);background:rgba(94,139,160,0.08);color:var(--sky)}
+.fi{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-family:'Montserrat',sans-serif;color:var(--navy);background:white;outline:none;resize:vertical;line-height:1.5;transition:border-color .15s;min-height:34px}
+.fi:focus{border-color:var(--rose)}
+.fi-num{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-family:'Montserrat',sans-serif;color:var(--navy);background:white;outline:none;transition:border-color .15s;text-align:right}
+.fi-num:focus{border-color:var(--rose)}
+.num-grid{display:grid;gap:8px}
+.num-wrap{display:flex;flex-direction:column;gap:3px}
+.num-label{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
+.upload-zone{border:1.5px dashed var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .15s;background:var(--sand)}
+.upload-zone:hover{border-color:var(--rose)}
+.upload-btn{background:var(--navy);color:white;border:none;border-radius:6px;padding:5px 12px;font-size:10px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;flex-shrink:0}
+.upload-list{display:flex;flex-direction:column;gap:4px;margin-top:4px}
+.upload-item{background:var(--sand2);border-radius:6px;padding:5px 10px;font-size:10px;color:var(--text2);display:flex;justify-content:space-between;align-items:center}
+.upload-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:0 2px}
+.upload-del:hover{color:var(--rose)}
+.gen-btn{width:100%;background:var(--navy);color:white;border:none;border-radius:10px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif;margin-top:4px;transition:background .15s}
+.gen-btn:hover{background:#2C4A5E}
+.sy-wrap{background:white;border-radius:12px;border:1px solid var(--border);padding:22px;margin-top:16px;display:none}
+.sy-wrap.show{display:block}
+.sy-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.sy-title{font-family:'Abril Fatface',cursive;font-size:18px;color:var(--navy)}
+.copy-btn{background:var(--rose);color:white;border:none;border-radius:7px;padding:7px 14px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Montserrat',sans-serif}
+.sy-body{font-family:'Lora',serif;font-size:12px;color:var(--text);line-height:1.8;white-space:pre-wrap}
+.footer{text-align:center;padding:12px;font-family:'Lora',serif;font-size:10px;font-style:italic;color:var(--text3)}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="brand"><div class="brand-dot"></div><div class="brand-label">Auraé — L'Ancrage</div></div>
+  <div class="htitle">Mon <em>audit</em> de presence digitale</div>
+  <div class="hsub">État des lieux complet de tout ce que vous faites ou ne faites pas en communication digitale.</div>
+  <div class="hactions">
+    <button class="btn rose" onclick="genSy()">Générer ma synthèse</button>
+    <button class="btn sec" onclick="saveData()">Sauvegarder</button>
+    <button class="btn sec" onclick="document.getElementById('rf').click()">Restaurer</button>
+    <input type="file" id="rf" accept=".json" style="display:none" onchange="restoreData(event)">
+  </div>
+</div>
+<div class="main">
+<div class="intro">
+  Remplissez chaque canal. Vous pouvez joindre des captures d'écran de vos statistiques pour chaque canal. Si vous n'avez pas accès à un compte ou si vous n'êtes pas sûr d'en avoir un, notez-le. Ce que vous ne savez pas, notez-le dans la section Questions avant le call.
+</div>
+<div id="root"></div>
+<button class="gen-btn" onclick="genSy()">Générer ma synthèse</button>
+<div class="sy-wrap" id="synth">
+  <div class="sy-head">
+    <div class="sy-title">Mon audit de présence digitale</div>
+    <button class="copy-btn" onclick="copySy()">Copier</button>
+  </div>
+  <div class="sy-body" id="syBody"></div>
+</div>
+<div class="footer">Auraé — Audit de présence digitale · Données sauvegardées dans ce navigateur</div>
+</div>
+<script>
+var D = {};
+var FILES = {};
+
+// ===== DONNÉES =====
+var SECTIONS = [
+ {nom:"Indispensables", ico:"STAR",
+  canaux:[
+   {id:"gbiz", nom:"Fiche Google Business", ico:"MAP", tag:"ind", existKey:"existe",
+    groups:[
+     {t:"Présence et accès", cond:null, qs:[
+      {id:"existe", lbl:"Avez-vous une fiche Google Business ?", opts:["Oui","Non","Je ne sais pas"]},
+      {id:"url", lbl:"Nom exact de la fiche", type:"text", ph:"ex : Europalu Menuiserie Cuers", cond:"oui"},
+      {id:"revendiquee", lbl:"La fiche est-elle gérée par vous ?", opts:["Oui","Non","Je ne sais pas"], cond:"oui"},
+      {id:"complete", lbl:"Est-elle complète ? (description, horaires, categories, photos)", opts:["Oui, très complète","Partiellement","Non, incomplète"], cond:"oui"}
+     ]},
+     {t:"Stats Google Business", cond:"oui", tip:"Disponibles dans Google Business > Statistiques", qs:[
+      {id:"nb_avis", lbl:"Nombre d'avis clients", type:"num", ph:"152"},
+      {id:"note", lbl:"Note moyenne", type:"num", ph:"4.9"},
+      {id:"appels", lbl:"Appels reçus via Google (par mois)", type:"num", ph:"15"},
+      {id:"itineraires", lbl:"Demandes d'itinéraires (par mois)", type:"num", ph:"8"},
+      {id:"clics_site", lbl:"Clics vers le site depuis Google (par mois)", type:"num", ph:"40"},
+      {id:"photos_vues", lbl:"Vues des photos (par mois)", type:"num", ph:"3000"}
+     ]},
+     {t:"Contenu et activité", cond:"oui", qs:[
+      {id:"posts", lbl:"Publiez-vous des Google Posts ?", opts:["Oui, regulierement","Parfois","Non"]},
+      {id:"photos_ajout", lbl:"Ajoutez-vous des photos régulièrement ?", opts:["Oui","Non","Rarement"]},
+      {id:"reponses_avis", lbl:"Répondez-vous aux avis clients ?", opts:["Oui, tous","La plupart","Rarement","Non"]}
+     ]},
+     {t:"Organisation", cond:null, qs:[
+      {id:"resp", lbl:"Qui s'en occupe au quotidien ? (fonction)", type:"text", ph:"ex : Assistante commerciale, dirigeant, personne pour l'instant"}
+     ]},
+     {t:"Captures d'écran et exports", cond:null, upload:true}
+    ]},
+   {id:"site", nom:"Site internet", ico:"WEB", tag:"ind", existKey:"existe",
+    groups:[
+     {t:"Présence et accès", cond:null, qs:[
+      {id:"existe", lbl:"Avez-vous un site internet ?", opts:["Oui","Non","En cours de creation"]},
+      {id:"url", lbl:"Adresse du site", type:"text", ph:"ex : www.europalu.fr", cond:"oui"},
+      {id:"hebergeur", lbl:"Qui héberge et gère le site ?", type:"text", ph:"ex : Solocal, Wix, prestataire independant", cond:"oui"},
+      {id:"age", lbl:"Date de création ou dernière refonte", opts:["Moins de 1 an","1 a 3 ans","Plus de 3 ans","Je ne sais pas"], cond:"oui"},
+      {id:"acces", lbl:"Avez-vous les accès pour modifier le site ?", opts:["Oui, completement","Oui, partiellement","Non"], cond:"oui"},
+      {id:"mobile", lbl:"Fonctionne-t-il bien sur téléphone ?", opts:["Oui","Non","Je ne sais pas"], cond:"oui"},
+      {id:"cout", lbl:"Coût annuel (hébergement + prestataire)", type:"text", ph:"ex : 3000 euros par an Solocal"}
+     ]},
+     {t:"Stats site internet", cond:"oui", tip:"Disponibles dans Google Analytics ou votre hebergeur", qs:[
+      {id:"visiteurs", lbl:"Visiteurs uniques par mois", type:"num", ph:"800"},
+      {id:"duree", lbl:"Durée moyenne de visite (en secondes)", type:"num", ph:"150"},
+      {id:"rebond", lbl:"Taux de rebond (%)", type:"num", ph:"65"},
+      {id:"leads", lbl:"Demandes de devis ou contacts via le site par mois", type:"num", ph:"10"},
+      {id:"source", lbl:"D'où viennent principalement vos visiteurs ?", opts:["Google naturel","Google Ads","Reseaux sociaux","Direct","Je ne sais pas"]}
+     ]},
+     {t:"Organisation", cond:null, qs:[
+      {id:"resp", lbl:"Qui gère le site au quotidien ? (fonction)", type:"text", ph:"ex : Prestataire Solocal, assistante, personne"}
+     ]},
+     {t:"Captures d'écran et exports", cond:null, upload:true}
+    ]}
+  ]},
+ {nom:"Reseaux sociaux", ico:"PHONE",
+  canaux:[
+   {id:"ig", nom:"Instagram", ico:"PHOTO", tag:"res", existKey:"existe",
+    groups:[
+     {t:"Présence et accès", cond:null, qs:[
+      {id:"existe", lbl:"Avez-vous un compte Instagram ?", opts:["Oui, professionnel","Oui, personnel","Non"]},
+      {id:"url", lbl:"Nom du compte (@...)", type:"text", ph:"ex : @europalu_menuiserie", cond:"oui"},
+      {id:"nb_comptes", lbl:"Un seul compte ou plusieurs ?", opts:["Un seul compte","Plusieurs comptes","Je ne sais pas"], cond:"oui"},
+      {id:"acces", lbl:"Avez-vous les identifiants pour vous connecter ?", opts:["Oui","Non","Partiellement"], cond:"oui"}
+     ]},
+     {t:"Stats Instagram", cond:"oui", tip:"Disponibles dans Instagram > Informations professionnelles", qs:[
+      {id:"abonnes", lbl:"Nombre d'abonnés", type:"num", ph:"487"},
+      {id:"nb_posts", lbl:"Nombre total de publications", type:"num", ph:"124"},
+      {id:"portee", lbl:"Portée moyenne par publication (personnes)", type:"num", ph:"200"},
+      {id:"impressions", lbl:"Impressions mensuelles", type:"num", ph:"3500"},
+      {id:"likes_moy", lbl:"Likes moyens par publication", type:"num", ph:"15"},
+      {id:"comments_moy", lbl:"Commentaires moyens par publication", type:"num", ph:"2"},
+      {id:"visites_profil", lbl:"Visites du profil par semaine", type:"num", ph:"80"},
+      {id:"clics_site", lbl:"Clics vers le site par semaine", type:"num", ph:"5"},
+      {id:"contacts_dm", lbl:"Avez-vous déjà reçu des contacts ou devis via Instagram ?", opts:["Oui, plusieurs fois","Oui, rarement","Non","Pas mesure"]}
+     ]},
+     {t:"Contenu et activité", cond:"oui", qs:[
+      {id:"freq", lbl:"Fréquence de publication actuelle", opts:["Plusieurs fois par semaine","1 fois par semaine","1 a 2 fois par mois","Rarement ou jamais"]},
+      {id:"types", lbl:"Types de contenu principaux", opts:["Photos de chantiers","Photos de produits","Reels ou videos","Melange","Rien de regulier"]},
+      {id:"coherence", lbl:"Y a-t-il une cohérence esthétique dans le feed ?", opts:["Oui, coherent","Plutot pas","Non"]},
+      {id:"hashtags", lbl:"Utilisez-vous des hashtags stratégiques ?", opts:["Oui, systematiquement","Parfois","Non"]}
+     ]},
+     {t:"Image percue", cond:"oui", qs:[
+      {id:"image_voulue", lbl:"L'image que vous voulez renvoyer sur Instagram", type:"text", ph:"ex : entreprise haut de gamme, artisanale, premium..."},
+      {id:"image_reelle", lbl:"L'image que ce compte renvoie aujourd'hui selon vous", type:"text", ph:"ex : plutot chantier basique, peu qualifie..."},
+      {id:"avis_equipe", lbl:"Avez-vous demandé à un membre de l'équipe ou un proche ce qu'il pense de votre compte Instagram ?", opts:["Oui","Non"]},
+      {id:"retour_equipe", lbl:"Si oui, quel retour ?", type:"text", ph:"ex : mon commercial trouve que les photos ne sont pas assez belles...", cond:"avis_oui"}
+     ]},
+     {t:"Organisation", cond:null, qs:[
+      {id:"resp", lbl:"Qui s'en occupe ? (fonction)", type:"text", ph:"ex : Assistante, dirigeant, prestataire"}
+     ]},
+     {t:"Captures d'écran et exports", cond:null, upload:true}
+    ]},
+   {id:"li", nom:"LinkedIn", ico:"BRIEFCASE", tag:"res", existKey:"existe",
+    groups:[
+     {t:"Présence et accès", cond:null, qs:[
+      {id:"existe", lbl:"Avez-vous une presence sur LinkedIn ?", opts:["Page entreprise + profils","Page entreprise seulement","Profils seulement","Non"]},
+      {id:"page_url", lbl:"URL de la page entreprise", type:"text", ph:"ex : linkedin.com/company/europalu", cond:"oui"},
+      {id:"acces_page", lbl:"Avez-vous les accès a la page entreprise ?", opts:["Oui","Non","Pas de page entreprise"], cond:"oui"},
+      {id:"nb_profils", lbl:"Combien de profils actifs dans l'équipe ?", opts:["Plus de 5","2 a 5","1 seul","Aucun actif"], cond:"oui"}
+     ]},
+     {t:"Stats LinkedIn", cond:"oui", tip:"Disponibles dans LinkedIn > Statistiques de la page", qs:[
+      {id:"abonnes", lbl:"Abonnés sur la page entreprise", type:"num", ph:"230"},
+      {id:"impressions", lbl:"Impressions mensuelles", type:"num", ph:"800"},
+      {id:"visites", lbl:"Visites de la page par mois", type:"num", ph:"60"},
+      {id:"contacts", lbl:"Contacts qualifiés reçus via LinkedIn ?", opts:["Oui, plusieurs fois","Oui, rarement","Non","Pas mesure"]}
+     ]},
+     {t:"Contenu et activité", cond:"oui", qs:[
+      {id:"freq", lbl:"Fréquence de publication", opts:["Reguliere (1x par semaine ou plus)","Occasionnelle","Quasiment jamais"]},
+      {id:"qui_publie", lbl:"Qui publie ?", opts:["Le dirigeant","L equipe","La page entreprise","Personne"]}
+     ]},
+     {t:"Image percue", cond:"oui", qs:[
+      {id:"image_dirigeant", lbl:"L'image que renvoie le profil du dirigeant sur LinkedIn", type:"text", ph:"ex : chef d entreprise local, peu actif, pas de prise de parole..."},
+      {id:"positionnement", lbl:"Le positionnement LinkedIn est-il cohérent avec l'ambition de l'entreprise ?", opts:["Oui","Non","Partiellement","Je ne sais pas"]}
+     ]},
+     {t:"Organisation", cond:null, qs:[
+      {id:"resp", lbl:"Qui s'en occupe ? (fonction)", type:"text", ph:"ex : Dirigeant seul, assistante"}
+     ]},
+     {t:"Captures d'écran et exports", cond:null, upload:true}
+    ]},
+   {id:"fb", nom:"Facebook", ico:"GROUP", tag:"res", existKey:"existe",
+    groups:[
+     {t:"Présence et accès", cond:null, qs:[
+      {id:"existe", lbl:"Avez-vous une page Facebook ?", opts:["Oui","Non","Je ne sais pas"]},
+      {id:"url", lbl:"URL ou nom de la page", type:"text", ph:"ex : facebook.com/europalu", cond:"oui"},
+      {id:"nb_comptes", lbl:"Une seule page ou plusieurs ?", opts:["Une seule page","Plusieurs pages ou comptes","Je ne sais pas"], cond:"oui"},
+      {id:"acces", lbl:"Avez-vous les accès administrateur ?", opts:["Oui","Non","Je ne sais pas"], cond:"oui"}
+     ]},
+     {t:"Stats Facebook", cond:"oui", tip:"Disponibles dans Facebook > Statistiques de la page", qs:[
+      {id:"abonnes", lbl:"Abonnés ou J'aime la page", type:"num", ph:"850"},
+      {id:"portee", lbl:"Portée hebdomadaire (personnes touchées)", type:"num", ph:"400"},
+      {id:"engagement", lbl:"Réactions moyennes par publication", type:"num", ph:"5"},
+      {id:"contacts", lbl:"Contacts ou devis reçus via Facebook ?", opts:["Oui, regulierement","Oui, rarement","Non","Pas mesure"]}
+     ]},
+     {t:"Contenu et activité", cond:"oui", qs:[
+      {id:"freq", lbl:"Fréquence de publication", opts:["Reguliere","Occasionnelle","Quasiment jamais"]},
+      {id:"coherence", lbl:"Cohérence entre Facebook et Instagram ?", opts:["Oui, memes contenus","Partiellement","Non"]}
+     ]},
+     {t:"Organisation", cond:null, qs:[
+      {id:"resp", lbl:"Qui s'en occupe ? (fonction)", type:"text", ph:"ex : Dirigeant, assistante"}
+     ]},
+     {t:"Captures d'écran et exports", cond:null, upload:true}
+    ]},
+   {id:"pi", nom:"Pinterest", ico:"PIN", tag:"res", existKey:"existe",
+    groups:[
+     {t:"Présence et accès", cond:null, qs:[
+      {id:"existe", lbl:"Avez-vous un compte Pinterest ?", opts:["Oui","Non"]},
+      {id:"url", lbl:"URL du compte", type:"text", ph:"ex : pinterest.fr/europalu", cond:"oui"},
+      {id:"acces", lbl:"Avez-vous les accès ?", opts:["Oui","Non"], cond:"oui"}
+     ]},
+     {t:"Stats Pinterest", cond:"oui", tip:"Disponibles dans Pinterest > Analyse", qs:[
+      {id:"impressions", lbl:"Impressions mensuelles", type:"num", ph:"2400"},
+      {id:"clics", lbl:"Clics vers le site par mois", type:"num", ph:"30"},
+      {id:"abonnes", lbl:"Abonnes", type:"num", ph:"120"},
+      {id:"epingles", lbl:"Nombre d'épingles publiées", type:"num", ph:"45"},
+      {id:"tableaux", lbl:"Nombre de tableaux", type:"num", ph:"6"}
+     ]},
+     {t:"Organisation", cond:null, qs:[
+      {id:"resp", lbl:"Qui s'en occupe ? (fonction)", type:"text", ph:"ex : Assistante, personne", cond:"oui"}
+     ]},
+     {t:"Captures d'écran et exports", cond:null, upload:true}
+    ]},
+   {id:"yt", nom:"YouTube", ico:"VIDEO", tag:"res", existKey:"existe",
+    groups:[
+     {t:"Présence et accès", cond:null, qs:[
+      {id:"existe", lbl:"Avez-vous une chaine YouTube ?", opts:["Oui","Non"]},
+      {id:"url", lbl:"URL de la chaîne", type:"text", ph:"ex : youtube.com/@europalu", cond:"oui"},
+      {id:"acces", lbl:"Avez-vous les accès ?", opts:["Oui","Non"], cond:"oui"}
+     ]},
+     {t:"Stats YouTube", cond:"oui", tip:"Disponibles dans YouTube Studio", qs:[
+      {id:"abonnes", lbl:"Abonnes", type:"num", ph:"120"},
+      {id:"nb_videos", lbl:"Nombre de vidéos publiées", type:"num", ph:"8"},
+      {id:"vues_moy", lbl:"Vues moyennes par vidéo", type:"num", ph:"250"},
+      {id:"vues_total", lbl:"Vues totales de la chaîne", type:"num", ph:"2000"}
+     ]},
+     {t:"Captures d'écran et exports", cond:null, upload:true}
+    ]}
+  ]},
+ {nom:"Publicite en ligne", ico:"TARGET",
+  canaux:[
+   {id:"gads", nom:"Google Ads", ico:"TARGET", tag:"aut", existKey:"utilise",
+    groups:[
+     {t:"Utilisation", cond:null, qs:[
+      {id:"utilise", lbl:"Faites-vous de la publicité Google Ads ?", opts:["Oui, actuellement","Par le passe","Non, jamais"]},
+      {id:"gere", lbl:"Qui gère les campagnes ?", type:"text", ph:"ex : Agence, prestataire, en interne", cond:"oui"},
+      {id:"budget", lbl:"Budget mensuel Google Ads (euros)", type:"num", ph:"300", cond:"oui"}
+     ]},
+     {t:"Résultats Google Ads", cond:"oui", tip:"Disponibles dans Google Ads > Rapport de conversions", qs:[
+      {id:"clics", lbl:"Clics par mois", type:"num", ph:"150"},
+      {id:"leads", lbl:"Leads ou contacts générés par mois", type:"num", ph:"8"},
+      {id:"cout_lead", lbl:"Coût par lead approximatif (euros)", type:"num", ph:"37"},
+      {id:"satisfaction", lbl:"Satisfait des résultats Google Ads ?", opts:["Oui, bons resultats","Resultats mitiges","Non, decevant","Pas mesure"]}
+     ]},
+     {t:"Captures d'écran et exports", cond:null, upload:true}
+    ]},
+   {id:"meta", nom:"Meta Ads (Facebook et Instagram)", ico:"TARGET", tag:"aut", existKey:"utilise",
+    groups:[
+     {t:"Utilisation", cond:null, qs:[
+      {id:"utilise", lbl:"Faites-vous de la publicité Meta ?", opts:["Oui, actuellement","Par le passe","Non, jamais"]},
+      {id:"budget", lbl:"Budget mensuel Meta Ads (euros)", type:"num", ph:"150", cond:"oui"}
+     ]},
+     {t:"Résultats Meta Ads", cond:"oui", tip:"Disponibles dans Meta Business Suite > Publicites", qs:[
+      {id:"leads", lbl:"Leads ou contacts générés par mois", type:"num", ph:"4"},
+      {id:"satisfaction", lbl:"Satisfait des résultats ?", opts:["Oui","Resultats mitiges","Non, decevant","Pas mesure"]}
+     ]},
+     {t:"Captures d'écran et exports", cond:null, upload:true}
+    ]}
+  ]},
+ {nom:"Autres plateformes", ico:"LINK",
+  canaux:[
+   {id:"houzz", nom:"Houzz", ico:"HOME", tag:"aut", existKey:"existe",
+    groups:[
+     {t:"Presence", cond:null, qs:[
+      {id:"existe", lbl:"Avez-vous un profil sur Houzz ?", opts:["Oui","Non","Je ne sais pas"]},
+      {id:"url", lbl:"URL du profil", type:"text", ph:"ex : houzz.fr/pro/europalu", cond:"oui"},
+      {id:"acces", lbl:"Avez-vous les accès ?", opts:["Oui","Non"], cond:"oui"}
+     ]},
+     {t:"Stats Houzz", cond:"oui", qs:[
+      {id:"projets", lbl:"Nombre de projets publiés", type:"num", ph:"12"},
+      {id:"avis", lbl:"Nombre d'avis", type:"num", ph:"8"},
+      {id:"contacts", lbl:"Contacts reçus via Houzz ?", opts:["Oui","Non","Pas mesure"]}
+     ]},
+     {t:"Captures d'écran et exports", cond:null, upload:true}
+    ]},
+   {id:"annuaires", nom:"Annuaires et repertoires", ico:"LIST", tag:"aut", existKey:"pj",
+    groups:[
+     {t:"Presence", cond:null, qs:[
+      {id:"pj", lbl:"Êtes-vous sur les Pages Jaunes ?", opts:["Oui","Non","Je ne sais pas"]},
+      {id:"pj_acces", lbl:"Avez-vous les accès a votre fiche Pages Jaunes ?", opts:["Oui","Non","Je ne sais pas"], cond:"oui"},
+      {id:"autres", lbl:"Êtes-vous sur d'autres répertoires en ligne ?", opts:["Oui","Non","Je ne sais pas"]},
+      {id:"detail", lbl:"Lesquels ?", type:"text", ph:"ex : Yelp, Habitatpresto, Artisan.com, Allovoisins...", cond:"autres_oui"}
+     ]}
+    ]},
+   {id:"reseaux_pro", nom:"Reseaux professionnels et groupements", ico:"HANDSHAKE", tag:"aut", existKey:"membre",
+    groups:[
+     {t:"Appartenance", cond:null, qs:[
+      {id:"membre", lbl:"Faites-vous partie d'un réseau ou groupement ?", opts:["Oui","Non"]},
+      {id:"detail", lbl:"Lesquels ?", type:"text", ph:"ex : Technal, CCI, BNI, Federation du Batiment, groupement local", cond:"oui"},
+      {id:"visible", lbl:"Êtes-vous visible sur leur site ou répertoire en ligne ?", opts:["Oui","Non","Je ne sais pas"], cond:"oui"},
+      {id:"lien", lbl:"Lien vers votre fiche sur leur site", type:"text", ph:"ex : technal.fr/menuisiers/europalu", cond:"oui"}
+     ]}
+    ]}
+  ]},
+ {nom:"Reputation et e-reputation", ico:"STAR2",
+  canaux:[
+   {id:"avis", nom:"Avis en ligne (toutes plateformes)", ico:"STAR2", tag:"aut", existKey:null,
+    groups:[
+     {t:"Avis sur les differentes plateformes", cond:null, qs:[
+      {id:"google_note", lbl:"Note Google et nombre d'avis", type:"text", ph:"ex : 4.9 avec 152 avis"},
+      {id:"pj_note", lbl:"Note Pages Jaunes et nombre d'avis", type:"text", ph:"ex : 4.5 avec 23 avis"},
+      {id:"houzz_note", lbl:"Note Houzz et nombre d'avis", type:"text", ph:"ex : 4.8 avec 8 avis"},
+      {id:"facebook_note", lbl:"Note Facebook et nombre d'avis", type:"text", ph:"ex : 4.7 avec 45 avis"},
+      {id:"autres_avis", lbl:"Avis sur les autres plateformes", type:"text", ph:"ex : Trustpilot 4.6 avec 5 avis, forum local..."},
+      {id:"avis_negatifs", lbl:"Y a-t-il des avis négatifs notables ou récurrents ?", opts:["Non, aucun","Quelques avis negatifs ponctuels","Oui, un probleme recurrent"]},
+      {id:"detail_negatifs", lbl:"Si oui, sur quoi portent ces avis négatifs ?", type:"text", ph:"ex : delais de livraison, SAV...", cond:"negatifs_oui"}
+     ]},
+     {t:"Réputation du dirigeant", cond:null, qs:[
+      {id:"recherche_dirigeant", lbl:"Quand on tape le nom du dirigeant sur Google, sur quoi tombe-t-on ?", type:"text", ph:"ex : profil LinkedIn, articles, rien de notable..."},
+      {id:"image_dirigeant", lbl:"Cette présence est-elle positive ou neutre pour l'entreprise ?", opts:["Positive","Neutre","Negative ou problematique","Inexistante"]}
+     ]},
+     {t:"Présence des salariés sur internet", cond:null, qs:[
+      {id:"salaries_linkedin", lbl:"Combien de salariés ont un profil LinkedIn actif ?", opts:["Aucun","1 a 3","4 a 10","Plus de 10"]},
+      {id:"salaries_image", lbl:"L'image renvoyée par les profils des salariés est-elle cohérente avec celle de l'entreprise ?", opts:["Oui, coherente","Plutot neutre","Non, certains profils posent probleme","Je ne sais pas"]},
+      {id:"salaries_detail", lbl:"Si des profils posent problème, précisez", type:"text", ph:"ex : photos non professionnelles, informations contradictoires...", cond:"pb_salaries"}
+     ]},
+     {t:"Captures d'écran et exports", cond:null, upload:true}
+    ]},
+   {id:"image_globale", nom:"Image globale et coherence", ico:"MIRROR", tag:"aut", existKey:null,
+    groups:[
+     {t:"Perception externe", cond:null, qs:[
+      {id:"image_voulue", lbl:"Quelle image voulez-vous renvoyer ? (en quelques mots)", type:"text", ph:"ex : artisan premium, specialiste haut de gamme, reference locale"},
+      {id:"image_percue", lbl:"Quelle image pensez-vous renvoyer aujourd'hui ? (en quelques mots)", type:"text", ph:"ex : entreprise locale serieuse mais pas vraiment premium..."},
+      {id:"ecart", lbl:"Y a-t-il un écart entre les deux ?", opts:["Non, c est coherent","Oui, leger ecart","Oui, ecart important"]},
+      {id:"retour_extern", lbl:"Avez-vous déjà demandé à un client, un proche ou un collaborateur ce qu'il pense de votre communication en ligne ?", opts:["Oui","Non"]},
+      {id:"detail_extern", lbl:"Si oui, quel retour ont-ils donne ?", type:"text", ph:"ex : ils trouvent que les photos ne sont pas representatives...", cond:"retour_oui"}
+     ]},
+     {t:"Cohérence entre canaux", cond:null, qs:[
+      {id:"charte", lbl:"Y a-t-il une cohérence visuelle entre tous vos canaux ?", opts:["Oui, tout est coherent","Partiellement","Non, chaque canal a son style"]},
+      {id:"message", lbl:"Le positionnement et les messages sont-ils les mêmes partout ?", opts:["Oui","Non","Je ne sais pas"]},
+      {id:"manque", lbl:"Quel est selon vous le plus grand manque dans votre communication digitale ?", type:"text", ph:"ex : pas de belles photos, pas de strategie, pas de temps, pas de budget..."}
+     ]},
+     {t:"Budget et organisation globale", cond:null, qs:[
+      {id:"budget", lbl:"Avez-vous un budget communication annuel défini ?", opts:["Oui","Non","A definir"]},
+      {id:"budget_montant", lbl:"Montant approximatif (euros par an, hors salaires internes)", type:"text", ph:"ex : 5000 euros par an", cond:"budget_oui"},
+      {id:"prestataires", lbl:"Faites-vous appel à des prestataires externes ?", opts:["Oui, plusieurs","Oui, un seul","Non"]},
+      {id:"prestataires_detail", lbl:"Lesquels et pour quoi ?", type:"text", ph:"ex : Solocal pour le site 3000e par an, agence photo 2 fois par an 500e", cond:"presta_oui"},
+      {id:"veille", lbl:"Faites-vous une veille sur vos concurrents en ligne ?", opts:["Oui, regulierement","Parfois","Non"]},
+      {id:"concurrents", lbl:"Concurrents que vous observez (noms + canaux)", type:"text", ph:"ex : C Confort sur Instagram, Var Pose Alu sur Google...", cond:"veille_oui"}
+     ]}
+    ]}
+  ]}
+];
+
+// ===== HELPERS =====
+function ld(k,d){try{var v=localStorage.getItem("audit3_"+k);return v?JSON.parse(v):d}catch(e){return d}}
+function sv(k,v){localStorage.setItem("audit3_"+k,JSON.stringify(v))}
+
+function isPresent(cid, existKey){
+  if(!existKey) return true;
+  var v = (D[cid]||{})[existKey]||"";
+  return v !== "" && v !== "Non" && v !== "Non, jamais" && v !== "Je ne sais pas";
+}
+
+function getIco(tag){
+  var map = {STAR:"⭐",MAP:"📍",WEB:"🌐",PHONE:"📱",PHOTO:"📸",BRIEFCASE:"💼",GROUP:"👥",PIN:"📌",VIDEO:"▶️",TARGET:"🎯",LINK:"🔗",HOME:"🏡",LIST:"📒",HANDSHAKE:"🤝",STAR2:"⭐",MIRROR:"🔍"};
+  return map[tag]||"•";
+}
+
+// ===== BUILD =====
+function build(){
+  D = ld("D",{});
+  var root = document.getElementById("root");
+  root.innerHTML = "";
+  SECTIONS.forEach(function(sec){
+    var s = document.createElement("div");
+    s.className = "section";
+    s.innerHTML = '<div class="shead"><div class="sico">'+getIco(sec.ico)+'</div><div class="sname">'+sec.nom+'</div></div>'
+      +'<div class="sbody" id="sec_'+sec.nom.replace(/ /g,"_")+'"></div>';
+    root.appendChild(s);
+    var sb = s.querySelector(".sbody");
+    sec.canaux.forEach(function(c){ buildCanal(c, sb); });
+  });
+}
+
+function buildCanal(c, cont){
+  var d = D[c.id]||{};
+  var stVal = c.existKey ? (d[c.existKey]||"") : "";
+  var stCls = stVal ? (stVal==="Non"||stVal==="Non, jamais"?"st-non":"st-oui") : "st-nd";
+  var stTxt = stVal || "A remplir";
+  var tagTxt = c.tag==="ind"?"Indispensable":c.tag==="res"?"Reseau":"Autre";
+
+  var bodyHtml = "";
+  c.groups.forEach(function(g, gi){
+    bodyHtml += buildGroup(c, g, gi, d);
+  });
+
+  var wrap = document.createElement("div");
+  wrap.className = "canal";
+  wrap.id = "canal_"+c.id;
+  wrap.innerHTML = '<div class="canal-head" data-cid="'+c.id+'" onclick="togCanal(this.dataset.cid)">'
+    +'<div class="canal-ico">'+getIco(c.ico)+'</div>'
+    +'<div class="canal-name">'+c.nom+'</div>'
+    +'<span class="ctag t-'+c.tag+'">'+tagTxt+'</span>'
+    +'<span class="cst '+stCls+'" id="cst_'+c.id+'">'+stTxt+'</span>'
+    +'<div class="carr" id="carr_'+c.id+'">▼</div>'
+    +'</div>'
+    +'<div class="canal-body" id="cbody_'+c.id+'">'+bodyHtml+'</div>';
+  cont.appendChild(wrap);
+}
+
+function buildGroup(c, g, gi, d){
+  // Déterminer visibilité du groupe
+  var show = true;
+  if(g.cond === "oui"){
+    show = isPresent(c.id, c.existKey);
+  }
+  var html = '<div class="grp" id="grp_'+c.id+'_'+gi+'" style="'+(show?"":"display:none")+'">';
+  html += '<div class="grp-title">'+g.t+'</div>';
+  if(g.upload){
+    html += '<div class="grp-body">'
+      +'<div class="qtip" style="font-family:Lora,serif;font-size:10px;font-style:italic;color:var(--text3)">Joignez des captures d ecran de vos statistiques ou exports PDF</div>'
+      +'<div class="upload-zone" data-upid="up_'+c.id+'" onclick="document.getElementById(this.dataset.upid).click()">'
+      +'<button class="upload-btn" type="button">Ajouter des fichiers</button>'
+      +'<span style="font-size:10px;color:var(--text3)">Captures d ecran, exports PDF...</span>'
+      +'</div>'
+      +'<input type="file" id="up_'+c.id+'" multiple accept="image/*,.pdf" style="display:none" data-cid="'+c.id+'" onchange="addFiles(this.dataset.cid,this)">'
+      +'<div class="upload-list" id="ulist_'+c.id+'"></div>'
+      +'</div>';
+  } else {
+    html += '<div class="grp-body">';
+    if(g.tip) html += '<div class="qtip">'+g.tip+'</div>';
+    g.qs.forEach(function(q){
+      html += buildQ(c.id, q, d);
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function buildQ(cid, q, d){
+  var val = d[q.id]||"";
+  var show = checkQCond(q, d);
+  var style = show ? "" : "display:none";
+
+  if(q.type === "num"){
+    return '<div class="qblock" id="qb_'+cid+'_'+q.id+'" style="'+style+'">'
+      +'<div class="qlabel">'+q.lbl+'</div>'
+      +'<input class="fi-num" id="q_'+cid+'_'+q.id+'" type="number" value="'+(val||"")+'" placeholder="'+q.ph+'" data-cid="'+cid+'" data-qid="'+q.id+'" oninput="saveQ(this.dataset.cid,this.dataset.qid)">'
+      +'</div>';
+  } else if(q.type === "text"){
+    return '<div class="qblock" id="qb_'+cid+'_'+q.id+'" style="'+style+'">'
+      +'<div class="qlabel">'+q.lbl+'</div>'
+      +'<input class="fi" id="q_'+cid+'_'+q.id+'" value="'+(val||"")+'" placeholder="'+(q.ph||"")+'" data-cid="'+cid+'" data-qid="'+q.id+'" oninput="saveQ(this.dataset.cid,this.dataset.qid)">'
+      +'</div>';
+  } else {
+    var optsHtml = q.opts.map(function(o){
+      return '<div class="opt'+(val===o?" on":"")+'" data-cid="'+cid+'" data-qid="'+q.id+'" data-val="'+o.replace(/"/g,"&quot;")+'" onclick="selQ(this.dataset.cid,this.dataset.qid,this.dataset.val,this)">'+o+'</div>';
+    }).join("");
+    return '<div class="qblock" id="qb_'+cid+'_'+q.id+'" style="'+style+'">'
+      +'<div class="qlabel">'+q.lbl+'</div>'
+      +'<div class="opts">'+optsHtml+'</div>'
+      +'</div>';
+  }
+}
+
+function checkQCond(q, d){
+  if(!q.cond) return true;
+  if(q.cond === "oui"){
+    // visible seulement si la première question du canal = oui-ish
+    return false; // géré au niveau du groupe
+  }
+  if(q.cond === "avis_oui") return (d["avis_equipe"]||"") === "Oui";
+  if(q.cond === "autres_oui") return (d["autres"]||"") === "Oui";
+  if(q.cond === "negatifs_oui") return (d["avis_negatifs"]||"").indexOf("Oui") === 0;
+  if(q.cond === "pb_salaries") return (d["salaries_image"]||"").indexOf("Non") === 0;
+  if(q.cond === "retour_oui") return (d["retour_extern"]||"") === "Oui";
+  if(q.cond === "budget_oui") return (d["budget"]||"") === "Oui";
+  if(q.cond === "presta_oui") return (d["prestataires"]||"").indexOf("Oui") === 0;
+  if(q.cond === "veille_oui") return (d["veille"]||"") !== "Non" && (d["veille"]||"") !== "";
+  return true;
+}
+
+// ===== INTERACTIONS =====
+function togCanal(id){
+  var b = document.getElementById("cbody_"+id);
+  var a = document.getElementById("carr_"+id);
+  b.classList.toggle("open");
+  a.style.transform = b.classList.contains("open") ? "" : "rotate(-90deg)";
+}
+
+function selQ(cid, qid, val, el){
+  if(!D[cid]) D[cid] = {};
+  D[cid][qid] = val;
+  sv("D", D);
+  el.closest(".opts").querySelectorAll(".opt").forEach(function(o){ o.classList.remove("on"); });
+  el.classList.add("on");
+  updateCanal(cid);
+}
+
+function saveQ(cid, qid){
+  if(!D[cid]) D[cid] = {};
+  var el = document.getElementById("q_"+cid+"_"+qid);
+  if(el) D[cid][qid] = el.value;
+  sv("D", D);
+}
+
+function updateCanal(cid){
+  // Mettre à jour le statut
+  var canal = findCanal(cid);
+  if(!canal) return;
+  var d = D[cid]||{};
+  if(canal.existKey){
+    var stEl = document.getElementById("cst_"+cid);
+    var stVal = d[canal.existKey]||"";
+    if(stEl && stVal){
+      stEl.textContent = stVal;
+      stEl.className = "cst "+(stVal==="Non"||stVal==="Non, jamais"?"st-non":"st-oui");
+    }
+  }
+  // Mettre à jour les groupes conditionnels
+  var pres = isPresent(cid, canal.existKey);
+  canal.groups.forEach(function(g, gi){
+    if(g.cond === "oui"){
+      var grpEl = document.getElementById("grp_"+cid+"_"+gi);
+      if(grpEl) grpEl.style.display = pres ? "" : "none";
+    }
+  });
+  // Mettre à jour les questions conditionnelles
+  canal.groups.forEach(function(g){
+    if(!g.qs) return;
+    g.qs.forEach(function(q){
+      if(!q.cond || q.cond === "oui") return;
+      var qEl = document.getElementById("qb_"+cid+"_"+q.id);
+      if(qEl) qEl.style.display = checkQCond(q, d) ? "" : "none";
+    });
+  });
+}
+
+function findCanal(cid){
+  var found = null;
+  SECTIONS.forEach(function(s){ s.canaux.forEach(function(c){ if(c.id===cid) found=c; }); });
+  return found;
+}
+
+// ===== UPLOAD =====
+function addFiles(cid, input){
+  if(!FILES[cid]) FILES[cid] = [];
+  Array.from(input.files).forEach(function(f){
+    FILES[cid].push(f.name);
+  });
+  renderFileList(cid);
+  input.value = "";
+}
+function removeFile(cid, idx){
+  if(FILES[cid]) FILES[cid].splice(idx,1);
+  renderFileList(cid);
+}
+function renderFileList(cid){
+  var ul = document.getElementById("ulist_"+cid);
+  if(!ul) return;
+  ul.innerHTML = "";
+  (FILES[cid]||[]).forEach(function(name, i){
+    var item = document.createElement("div");
+    item.className = "upload-item";
+    item.setAttribute('data-cid', cid);
+    item.setAttribute('data-idx', i);
+    item.innerHTML = '<span>'+name+'</span><button class="upload-del" data-cid="'+cid+'" data-idx="'+i+'" onclick="removeFile(this.dataset.cid,parseInt(this.dataset.idx))">×</button>';
+    ul.appendChild(item);
+  });
+}
+
+// ===== SYNTHESE =====
+function collectTexts(){
+  SECTIONS.forEach(function(sec){
+    sec.canaux.forEach(function(c){
+      c.groups.forEach(function(g){
+        if(!g.qs) return;
+        g.qs.forEach(function(q){
+          if(q.type==="text"||q.type==="num"){
+            var el = document.getElementById("q_"+c.id+"_"+q.id);
+            if(el && el.value){
+              if(!D[c.id]) D[c.id]={};
+              D[c.id][q.id] = el.value;
+            }
+          }
+        });
+      });
+    });
+  });
+}
+
+function genSy(){
+  collectTexts();
+  var txt = "AUDIT DE PRESENCE DIGITALE\n";
+  txt += "============================\n\n";
+
+  SECTIONS.forEach(function(sec){
+    var secHasData = sec.canaux.some(function(c){ return Object.keys(D[c.id]||{}).length > 0; });
+    if(!secHasData) return;
+    txt += sec.nom.toUpperCase()+"\n"+Array(sec.nom.length+1).join("-")+"\n\n";
+    sec.canaux.forEach(function(c){
+      var d = D[c.id]||{};
+      if(!Object.keys(d).length) return;
+      txt += getIco(c.ico)+" "+c.nom.toUpperCase()+"\n";
+      c.groups.forEach(function(g){
+        if(!g.qs) return;
+        var gData = g.qs.filter(function(q){
+          var v = q.type==="text"||q.type==="num" ? (document.getElementById("q_"+c.id+"_"+q.id)||{value:""}).value || (d[q.id]||"") : (d[q.id]||"");
+          return v;
+        });
+        if(!gData.length) return;
+        txt += "  ["+g.t+"]\n";
+        g.qs.forEach(function(q){
+          var v = q.type==="text"||q.type==="num" ? (document.getElementById("q_"+c.id+"_"+q.id)||{value:""}).value || (d[q.id]||"") : (d[q.id]||"");
+          if(v) txt += "  "+q.lbl+" : "+v+"\n";
+        });
+      });
+      if(FILES[c.id]&&FILES[c.id].length){
+        txt += "  Fichiers joints : "+FILES[c.id].join(", ")+"\n";
+      }
+      txt += "\n";
+    });
+  });
+
+  var sy = document.getElementById("synth");
+  document.getElementById("syBody").textContent = txt;
+  sy.classList.add("show");
+  sy.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function copySy(){
+  var txt = document.getElementById("syBody").textContent;
+  navigator.clipboard.writeText(txt).then(function(){
+    var b = document.querySelector(".copy-btn");
+    b.textContent = "Copie reussie";
+    setTimeout(function(){ b.textContent = "Copier"; }, 2000);
+  });
+}
+
+function saveData(){
+  collectTexts();
+  var blob = new Blob([JSON.stringify(D,null,2)], {type:"application/json"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a"); a.href=url; a.download="audit_presence_aurae.json"; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function restoreData(e){
+  var file = e.target.files[0]; if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev){
+    try{
+      D = JSON.parse(ev.target.result);
+      sv("D", D);
+      build();
+      alert("Donnees restaurees.");
+    } catch(err){ alert("Fichier invalide."); }
+  };
+  reader.readAsText(file);
+}
+
+build();
+</script>
+</body>
+</html>
