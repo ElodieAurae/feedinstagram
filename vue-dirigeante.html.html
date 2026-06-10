@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Vue dirigeant·e - Pilotage de la communication</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Lora:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --nuit:#0F1E2A;--nuit-clair:#1B2E3C;--mer:#2C4A5E;--ciel:#5E8BA0;
+    --sable:#F4EFE8;--blanc:#FDFCFA;--dore:#C49A3C;--vert:#4E7A72;--terre:#A4514C;
+    --trait:rgba(244,239,232,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:'Montserrat',sans-serif;background:var(--nuit);color:var(--sable);line-height:1.5;
+    padding:clamp(18px,4vw,52px);background-image:radial-gradient(ellipse at top right,rgba(94,139,160,.10),transparent 55%)}
+  .page{max-width:1080px;margin:0 auto}
+
+  .saisie{background:var(--nuit-clair);border:1px solid var(--trait);border-radius:4px;margin-bottom:30px;overflow:hidden}
+  .saisie>summary{cursor:pointer;list-style:none;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dore);font-weight:600}
+  .saisie>summary::-webkit-details-marker{display:none}
+  .saisie>summary .hint{color:rgba(244,239,232,.5);text-transform:none;letter-spacing:.02em;font-weight:400;font-size:12px}
+  .saisie[open]>summary{border-bottom:1px solid var(--trait)}
+  .form{padding:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:16px 22px}
+  .form .grp{display:flex;flex-direction:column;gap:6px}
+  .form label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ciel);font-weight:600}
+  .form input{background:var(--nuit);border:1px solid var(--trait);border-radius:3px;color:var(--blanc);
+    font-family:'Montserrat';font-size:15px;padding:9px 11px;width:100%}
+  .form input:focus{outline:none;border-color:var(--dore)}
+  .form .full{grid-column:1/-1;border-top:1px solid var(--trait);padding-top:14px;margin-top:2px;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,239,232,.5);font-weight:600}
+  .form .full small{display:block;text-transform:none;letter-spacing:.02em;font-weight:400;color:rgba(244,239,232,.45);margin-top:3px}
+
+  .top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:18px;border-bottom:1px solid var(--trait);padding-bottom:22px}
+  .marque{font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--dore);font-weight:600}
+  .client{font-size:22px;margin-top:6px;color:var(--blanc);font-weight:500}
+  .periode{font-size:13px;color:var(--ciel);margin-top:2px;letter-spacing:.04em}
+  .btn-pdf{font-family:'Montserrat';font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--sable);
+    background:transparent;border:1px solid var(--trait);padding:11px 18px;border-radius:2px;cursor:pointer;transition:border-color .2s,color .2s}
+  .btn-pdf:hover{border-color:var(--dore);color:var(--dore)}
+  .btn-pdf:focus-visible{outline:2px solid var(--dore);outline-offset:3px}
+
+  .verdict{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:38px 0 30px}
+  .verdict .etat{font-family:'Abril Fatface';font-size:clamp(26px,4.6vw,50px);line-height:1.15;color:var(--blanc)}
+  .verdict .phrase{font-family:'Montserrat',sans-serif;font-weight:400;font-size:clamp(15px,2vw,19px);color:var(--sable);max-width:62ch}
+  .verdict .phrase b{color:var(--dore);font-weight:600}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--trait);border:1px solid var(--trait);border-radius:4px;overflow:hidden}
+  .kpi{background:var(--nuit-clair);padding:22px 20px}
+  .kpi .lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ciel);font-weight:600}
+  .kpi .val{font-family:'Abril Fatface';font-size:clamp(26px,3.4vw,38px);color:var(--blanc);margin-top:12px;line-height:1}
+  .kpi .val.dore{color:var(--dore)}
+  .kpi .sub{font-size:12px;color:rgba(244,239,232,.55);margin-top:8px}
+
+  .pot{display:flex;gap:48px;flex-wrap:wrap;margin-top:4px}
+  .pot-item .pval{font-family:'Abril Fatface';font-size:clamp(28px,4vw,40px);color:var(--ciel);line-height:1}
+  .pot-item .plbl{font-size:12px;color:rgba(244,239,232,.6);margin-top:8px;max-width:24ch}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px}
+  .card{background:var(--nuit-clair);border:1px solid var(--trait);border-radius:4px;padding:24px 26px}
+  .card h2{font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--dore);margin-bottom:4px}
+  .card .note{font-size:12.5px;color:rgba(244,239,232,.55);margin-bottom:20px}
+
+  .canal{margin-bottom:16px}.canal:last-child{margin-bottom:0}
+  .canal .row{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;margin-bottom:6px}
+  .canal .nom{color:var(--blanc);font-weight:500}
+  .canal .ca{font-weight:600;color:var(--sable)}
+  .bar{height:8px;border-radius:4px;background:rgba(244,239,232,.08);overflow:hidden}
+  .bar span{display:block;height:100%;border-radius:4px;transition:width .3s}
+  .tag{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:2px 9px;border-radius:2px;font-weight:600;margin-left:10px}
+  .tag.com{background:rgba(196,154,60,.18);color:#D9B86A}
+  .tag.horscom{background:rgba(244,239,232,.10);color:rgba(244,239,232,.55)}
+
+  .bud-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .bud-head .gros{font-family:'Abril Fatface';font-size:30px;color:var(--blanc)}
+  .bud-head .sur{font-size:13px;color:var(--ciel);text-align:right}
+  .bud-bar{height:14px;border-radius:7px;background:rgba(244,239,232,.08);overflow:hidden;margin-top:6px}
+  .bud-bar span{display:block;height:100%;background:linear-gradient(90deg,var(--mer),var(--ciel));border-radius:7px;transition:width .3s}
+  .bud-meta{display:flex;justify-content:space-between;font-size:12px;color:rgba(244,239,232,.55);margin-top:9px}
+
+  .foot{margin-top:30px;padding-top:20px;border-top:1px solid var(--trait);font-size:11.5px;color:rgba(244,239,232,.4);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;letter-spacing:.03em}
+
+  @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+  @media print{
+    .verdict .phrase{color:var(--mer)}
+    body{background:#fff;color:var(--nuit);background-image:none}
+    .saisie,.btn-pdf{display:none}
+    .card,.kpi{background:#fff;border-color:#dcd5ca}.kpis{background:#dcd5ca}
+    .verdict .phrase{color:var(--mer)}
+    .kpi .val,.bud-head .gros{color:var(--nuit)}
+  }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <details class="saisie">
+    <summary><span>Saisie du mois</span><span class="hint">Reportez les totaux affichés par Notion. Votre saisie est conservée pour la prochaine fois.</span></summary>
+    <div class="form">
+      <div class="grp"><label>Entreprise</label><input id="i_client" type="text" value="Menuiserie Le Hir"></div>
+      <div class="grp"><label>Période</label><input id="i_periode" type="text" value="Depuis janvier 2026"></div>
+      <div class="grp"><label>Chantiers signés via la com</label><input id="i_chantiers" type="number" value="11"></div>
+      <div class="grp"><label>Opportunités en cours via la com</label><input id="i_opp" type="number" value="34"></div>
+      <div class="grp"><label>dont demandes concrètes et devis</label><input id="i_oppc" type="number" value="12"></div>
+      <div class="grp"><label>Investi en com (€)</label><input id="i_investi" type="number" value="11000"></div>
+      <div class="grp"><label>Enveloppe validée (€)</label><input id="i_enveloppe" type="number" value="12000"></div>
+      <div class="full">Montant des devis signés par canal (€)<small>Tous les canaux, y compris hors communication. Laissez à 0 ceux qui n'ont rien donné.</small></div>
+      <div class="grp"><label>Google Business</label><input id="i_c1" type="number" value="122000"></div>
+      <div class="grp"><label>Instagram</label><input id="i_c2" type="number" value="78000"></div>
+      <div class="grp"><label>Site internet</label><input id="i_c3" type="number" value="41000"></div>
+      <div class="grp"><label>LinkedIn</label><input id="i_c4" type="number" value="18000"></div>
+      <div class="grp"><label>Bouche à oreille</label><input id="i_c5" type="number" value="36000"></div>
+      <div class="grp"><label>Parrainage</label><input id="i_c6" type="number" value="14000"></div>
+      <div class="grp"><label>Fournisseur</label><input id="i_c7" type="number" value="22000"></div>
+      <div class="grp"><label>Salon / réseau pro</label><input id="i_c8" type="number" value="0"></div>
+      <div class="full">Montant des devis signés par typologie de client (€)</div>
+      <div class="grp"><label>Particuliers</label><input id="i_t1" type="number" value="148000"></div>
+      <div class="grp"><label>Architectes</label><input id="i_t2" type="number" value="92000"></div>
+      <div class="grp"><label>Pro (revente / pose)</label><input id="i_t3" type="number" value="55000"></div>
+      <div class="grp"><label>Entreprise (CHR / bureaux / commerces)</label><input id="i_t4" type="number" value="36000"></div>
+    </div>
+  </details>
+
+  <header class="top">
+    <div>
+      <div class="marque">Auraé &nbsp;·&nbsp; La Vue dirigeant·e</div>
+      <div class="client" id="o_client">Menuiserie Le Hir</div>
+      <div class="periode" id="o_periode">Depuis janvier 2026</div>
+    </div>
+    <button class="btn-pdf" onclick="window.print()">Exporter en PDF</button>
+  </header>
+
+  <section class="verdict">
+    <div class="etat" id="o_etat"></div>
+    <div class="phrase" id="o_phrase"></div>
+  </section>
+
+  <section class="kpis">
+    <div class="kpi"><div class="lbl">CA généré par la com</div><div class="val" id="o_ca"></div><div class="sub">Devis signés issus des canaux de communication</div></div>
+    <div class="kpi"><div class="lbl">Chantiers signés via la com</div><div class="val" id="o_nb"></div><div class="sub">Hors bouche-à-oreille, parrainage et fournisseurs</div></div>
+    <div class="kpi"><div class="lbl">Investi en com</div><div class="val" id="o_inv"></div><div class="sub">Sur une enveloppe de <span id="o_env"></span></div></div>
+    <div class="kpi"><div class="lbl">Coût d'un chantier signé</div><div class="val dore" id="o_cout"></div><div class="sub">Investi en com divisé par le nombre de chantiers signés</div></div>
+  </section>
+
+  <section class="card" style="margin-top:24px">
+    <h2>Le potentiel en cours</h2>
+    <p class="note">Des premiers contacts prometteurs, nés de la communication.</p>
+    <div class="pot">
+      <div class="pot-item"><div class="pval" id="o_opp"></div><div class="plbl">opportunités en cours via la com</div></div>
+      <div class="pot-item"><div class="pval" id="o_oppc"></div><div class="plbl">demandes concrètes et devis en cours</div></div>
+    </div>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <h2>Qui sont vos clients</h2>
+      <p class="note">CA signé par typologie de clientèle, toutes sources confondues. Pour affiner à qui l'on parle.</p>
+      <div id="o_typos"></div>
+    </section>
+
+    <section class="card">
+      <h2>Budget de l'année</h2>
+      <p class="note">L'enveloppe choisie ensemble, et ce qui a réellement été dépensé. L'enveloppe peut être réajustée en cours d'année.</p>
+      <div class="bud-head"><div class="gros" id="o_bud_inv"></div><div class="sur">sur <span id="o_bud_env"></span></div></div>
+      <div class="bud-bar"><span id="o_bud_bar"></span></div>
+      <div class="bud-meta"><span><span id="o_bud_pct"></span> % consommé</span><span>Reste <span id="o_bud_reste"></span></span></div>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:24px">
+    <h2>Ce que chaque source rapporte</h2>
+    <p class="note">CA signé attribué à chaque source, du plus au moins rentable. Repose sur la question posée à chaque contact : « comment nous avez-vous connus ? »</p>
+    <div id="o_canaux"></div>
+  </section>
+
+  <footer class="foot">
+    <span>Rapport généré avec la méthode Auraé</span>
+    <span>methodeaurae.fr</span>
+  </footer>
+
+</div>
+
+<script>
+  function euro(n){ return Math.round(n).toLocaleString('fr-FR') + ' €'; }
+  function keuro(n){
+    if (n >= 1000){ var v=n/1000; return (v>=100?Math.round(v):(v.toFixed(1).replace('.0','').replace('.',','))) + ' k€'; }
+    return Math.round(n) + ' €';
+  }
+
+  var CHAMPS = ['i_client','i_periode','i_chantiers','i_opp','i_oppc','i_investi','i_enveloppe',
+                'i_c1','i_c2','i_c3','i_c4','i_c5','i_c6','i_c7','i_c8',
+                'i_t1','i_t2','i_t3','i_t4'];
+
+  // 1. Le lien peut pre-remplir le nom et la periode (configuration faite par Aurae a la livraison)
+  // 2. La derniere saisie est conservee dans le navigateur et rechargee a l'ouverture
+  function restaurer(){
+    try{
+      var sauve = localStorage.getItem('vigie-aurae');
+      if (sauve){
+        var d = JSON.parse(sauve);
+        CHAMPS.forEach(function(id){ if (d[id] !== undefined) document.getElementById(id).value = d[id]; });
+      }
+    }catch(e){ /* navigateur sans stockage : la page fonctionne, sans memoire */ }
+    var p = new URLSearchParams(location.search);
+    if (p.get('client'))  document.getElementById('i_client').value  = p.get('client');
+    if (p.get('periode')) document.getElementById('i_periode').value = p.get('periode');
+
+  }
+  function sauvegarder(){
+    try{
+      var d = {};
+      CHAMPS.forEach(function(id){ d[id] = document.getElementById(id).value; });
+      localStorage.setItem('vigie-aurae', JSON.stringify(d));
+    }catch(e){ /* pas bloquant */ }
+  }
+
+  function calc(){
+    var v = function(id){ return +document.getElementById(id).value || 0; };
+    var client=document.getElementById('i_client').value;
+    var periode=document.getElementById('i_periode').value;
+    var nb=v('i_chantiers'), opp=v('i_opp'), oppc=v('i_oppc'), inv=v('i_investi'), env=v('i_enveloppe');
+
+    var canaux=[
+      {nom:'Google Business',   ca:v('i_c1'), com:true},
+      {nom:'Instagram',         ca:v('i_c2'), com:true},
+      {nom:'Site internet',     ca:v('i_c3'), com:true},
+      {nom:'LinkedIn',          ca:v('i_c4'), com:true},
+      {nom:'Bouche à oreille',  ca:v('i_c5'), com:false},
+      {nom:'Parrainage',        ca:v('i_c6'), com:false},
+      {nom:'Fournisseur',       ca:v('i_c7'), com:false},
+      {nom:'Salon / réseau pro',ca:v('i_c8'), com:true}
+    ];
+    var typos=[
+      {nom:'Particuliers',              ca:v('i_t1')},
+      {nom:'Architectes',               ca:v('i_t2')},
+      {nom:'Pro (revente / pose)',      ca:v('i_t3')},
+      {nom:'Entreprise (CHR / bureaux / commerces)',ca:v('i_t4')}
+    ];
+
+    // Le verdict ne juge que la communication : CA des canaux com / investi com
+    var caCom=canaux.filter(function(c){return c.com;}).reduce(function(s,c){return s+c.ca;},0);
+    var ratio=inv>0?caCom/inv:0;
+    var cout=nb>0?inv/nb:0;
+    var budpct=env>0?Math.min(100,inv/env*100):0;
+
+    document.getElementById('o_client').textContent=client;
+    document.getElementById('o_periode').textContent=periode;
+
+    var oe=document.getElementById('o_etat');
+    if(caCom>0){
+      oe.innerHTML=euro(inv)+' investis <span style="color:var(--dore)">\u2192</span> '+euro(caCom)+' de chantiers sign\u00e9s';
+    } else {
+      oe.innerHTML=euro(inv)+' investis <span style="color:var(--dore)">\u2192</span> '+opp+' opportunit\u00e9s en cours';
+    }
+    oe.style.color='var(--blanc)';
+    document.getElementById('o_phrase').innerHTML='';
+
+    document.getElementById('o_ca').textContent=keuro(caCom);
+    document.getElementById('o_nb').textContent=nb;
+    document.getElementById('o_inv').textContent=keuro(inv);
+    document.getElementById('o_env').textContent=keuro(env);
+    document.getElementById('o_cout').textContent=euro(cout);
+    document.getElementById('o_opp').textContent=opp;
+    document.getElementById('o_oppc').textContent=oppc;
+
+    document.getElementById('o_bud_inv').textContent=euro(inv);
+    document.getElementById('o_bud_env').textContent=euro(env);
+    document.getElementById('o_bud_bar').style.width=budpct+'%';
+    document.getElementById('o_bud_pct').textContent=Math.round(budpct);
+    document.getElementById('o_bud_reste').textContent=euro(Math.max(0,env-inv));
+
+    // Typologies
+    var ts=typos.slice().sort(function(a,b){return b.ca-a.ca;});
+    var maxt=Math.max.apply(null,ts.map(function(t){return t.ca;}).concat([1]));
+    var couleursT=['#C49A3C','#5E8BA0','#4E7A72','#2C4A5E'];
+    var htmlT='';
+    ts.forEach(function(t,i){
+      htmlT+='<div class="canal"><div class="row"><span class="nom">'+t.nom+'</span><span class="ca">'+euro(t.ca)+'</span></div>'+
+        '<div class="bar"><span style="width:'+(t.ca/maxt*100)+'%;background:'+couleursT[i]+'"></span></div></div>';
+    });
+    document.getElementById('o_typos').innerHTML=htmlT;
+
+    // Toutes les sources, etiquette com / hors com
+    var sorted=canaux.filter(function(c){return c.ca>0;}).sort(function(a,b){return b.ca-a.ca;});
+    var maxca=Math.max.apply(null,sorted.map(function(c){return c.ca;}).concat([1]));
+    var html='';
+    sorted.forEach(function(c){
+      var tcls=c.com?'com':'horscom';
+      var tag=c.com?'Communication':'Hors com';
+      var bcol=c.com?'#5E8BA0':'#6b6359';
+      html+='<div class="canal"><div class="row"><span class="nom">'+c.nom+
+        ' <span class="tag '+tcls+'">'+tag+'</span></span><span class="ca">'+euro(c.ca)+'</span></div>'+
+        '<div class="bar"><span style="width:'+(c.ca/maxca*100)+'%;background:'+bcol+'"></span></div></div>';
+    });
+    document.getElementById('o_canaux').innerHTML=html;
+  }
+
+  document.querySelectorAll('.form input').forEach(function(el){
+    el.addEventListener('input',function(){ calc(); sauvegarder(); });
+  });
+  restaurer();
+  calc();
+</script>
+</body>
+</html>
